@@ -49,17 +49,21 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a1a' rx='15' width='100' height='100'/><text x='10' y='58' font-size='40' font-family='Arial,sans-serif' font-weight='bold' fill='white'>EE</text><circle cx='78' cy='68' r='14' fill='none' stroke='white' stroke-width='4'/><line x1='88' y1='78' x2='96' y2='86' stroke='white' stroke-width='4' stroke-linecap='round'/><rect x='10' y='72' width='55' height='10' fill='%23dc2626'/></svg>">
 
     <style>
+        :root{--bg:#fafafa;--bg-card:#fff;--text:#1a1a1a;--text-muted:#525252;--text-light:#888;--border:#e5e5e5;--search-bg:#fff;--redact-bg:#1a1a1a;--tag-bg:#1e293b}
+        [data-theme="dark"]{--bg:#121212;--bg-card:#1e1e1e;--text:#e5e5e5;--text-muted:#a0a0a0;--text-light:#888;--border:#333;--search-bg:#2a2a2a;--redact-bg:#e5e5e5;--tag-bg:#374151}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Newsreader',Georgia,serif;background:#fafafa;color:#1a1a1a;line-height:1.7}
+        body{font-family:'Newsreader',Georgia,serif;background:var(--bg);color:var(--text);line-height:1.7;transition:background 0.3s,color 0.3s}
         a{color:inherit}
 
         .skip-link{position:absolute;top:-40px;left:0;background:#dc2626;color:#fff;padding:8px 16px;z-index:100;font-family:'Inter',sans-serif;font-size:14px;text-decoration:none}
         .skip-link:focus{top:0}
 
-        header[role="banner"]{background:#fafafa;padding:20px 0;position:sticky;top:0;z-index:50;border-bottom:1px solid #e5e5e5}
+        header[role="banner"]{background:var(--bg);padding:20px 0;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);transition:background 0.3s,border-color 0.3s}
         .header-inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
-        .header-search{display:flex;gap:10px;flex:1;max-width:560px}
-        .header-search input{flex:1;padding:14px 18px;border:1px solid #e5e5e5;border-radius:8px;font-size:16px;font-family:'Inter',sans-serif;background:#fff}
+        .header-search{display:flex;gap:10px;flex:1;max-width:560px;align-items:center}
+        .header-search input{flex:1;padding:14px 18px;border:1px solid var(--border);border-radius:8px;font-size:16px;font-family:'Inter',sans-serif;background:var(--search-bg);color:var(--text);transition:background 0.3s,border-color 0.3s,color 0.3s}
+        .dark-toggle{background:none;border:2px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:18px;line-height:1;transition:border-color 0.3s}
+        .dark-toggle:hover{border-color:#dc2626}
         .header-search input:focus{outline:none;border-color:#dc2626}
         .header-search input::placeholder{color:#9ca3af}
         .header-search button{background:#dc2626;color:#fff;border:none;padding:14px 22px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer}
@@ -67,20 +71,20 @@
         .logo{display:flex;align-items:center;gap:16px;text-decoration:none}
         .logo-icon{width:68px;height:68px;background:#1a1a1a;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative}
         .logo-icon svg{width:60px;height:60px}
-        .logo-text{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:#1a1a1a;display:flex;flex-direction:column;line-height:1.1}
+        .logo-text{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:var(--text);display:flex;flex-direction:column;line-height:1.1;transition:color 0.3s}
         .logo-text .redact-bar{height:6px;background:#dc2626;margin-top:4px;width:100%}
         .logo-text .exposed{font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:#dc2626;letter-spacing:0.5px}
 
         main{max-width:960px;margin:0 auto;padding:48px 24px}
 
-        .intro{margin-bottom:48px;padding:40px 32px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;overflow:hidden}
+        .intro{margin-bottom:48px;padding:40px 32px;text-align:center;background:var(--bg-card);border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:relative;overflow:hidden;transition:background 0.3s}
         .intro::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");opacity:0.03;pointer-events:none}
         .intro h1{font-family:'Inter',sans-serif;font-size:36px;font-weight:800;margin-bottom:16px;letter-spacing:-0.5px;line-height:1.15;position:relative}
         .intro h1::after{content:'';display:block;width:80px;height:4px;background:#dc2626;margin:20px auto 0}
-        .intro p{color:#525252;font-size:19px;max-width:600px;margin:0 auto;position:relative}
-        .intro p strong{color:#1a1a1a;font-weight:700}
+        .intro p{color:var(--text-muted);font-size:19px;max-width:600px;margin:0 auto;position:relative;transition:color 0.3s}
+        .intro p strong{color:var(--text);font-weight:700}
         .redacted{position:relative;display:inline-block;cursor:pointer}
-        .redacted::before{content:'';position:absolute;top:50%;left:-4px;right:-4px;height:1.1em;background:#1a1a1a;transform:translateY(-50%);transition:opacity 0.4s ease;z-index:2}
+        .redacted::before{content:'';position:absolute;top:50%;left:-4px;right:-4px;height:1.1em;background:var(--redact-bg);transform:translateY(-50%);transition:opacity 0.4s ease,background 0.3s;z-index:2}
         .redacted:hover::before{opacity:0}
         .redacted-text{color:transparent;font-weight:800;transition:color 0.4s ease}
         .redacted:hover .redacted-text{color:#dc2626}
@@ -89,9 +93,9 @@
         .results-count.visible{display:block}
 
         /* Article Preview Cards */
-        .article-preview{margin-bottom:24px;padding:24px;padding-bottom:40px;border-radius:12px;transition:all 0.2s ease;border:1px solid transparent;border-bottom:1px solid #e5e5e5}
+        .article-preview{margin-bottom:24px;padding:24px;padding-bottom:40px;border-radius:12px;transition:all 0.2s ease;border:1px solid transparent;border-bottom:1px solid var(--border)}
         .article-preview:last-of-type{border-bottom:none}
-        .article-preview:hover{background:#fff;border-color:#e5e5e5;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+        .article-preview:hover{background:var(--bg-card);border-color:var(--border);box-shadow:0 4px 12px rgba(0,0,0,0.08)}
         .article-preview.hidden{display:none}
         .article-preview.featured .article-top{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center;margin-bottom:16px}
         .article-preview .article-thumb{width:100%;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:transform 0.2s ease}
@@ -99,17 +103,18 @@
         .article-preview .article-thumb img{width:100%;height:auto;display:block}
         .article-preview .article-content{flex:1}
 
-        .article-meta{font-family:'Inter',sans-serif;font-size:12px;color:#888;margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+        .article-meta{font-family:'Inter',sans-serif;font-size:12px;color:var(--text-light);margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
         .article-tags{display:flex;flex-wrap:wrap;gap:6px}
-        .article-tag{background:#1e293b;color:#fff;padding:4px 12px;border-radius:4px;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.3px;text-decoration:none;transition:background 0.2s}
+        .article-tag{background:var(--tag-bg);color:#fff;padding:4px 12px;border-radius:4px;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.3px;text-decoration:none;transition:background 0.2s}
         .article-tag:hover{background:#dc2626}
-        .article-date{color:#888}
+        .article-date{color:var(--text-light)}
+        .reading-time{color:var(--text-light)}
 
         .article-preview h2{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;line-height:1.2;margin-bottom:14px;letter-spacing:-.3px}
-        .article-preview h2 a{text-decoration:none;color:#1a1a1a}
+        .article-preview h2 a{text-decoration:none;color:var(--text);transition:color 0.3s}
         .article-preview h2 a:hover{color:#dc2626}
 
-        .article-preview .lede{font-size:19px;color:#444;margin-bottom:18px;line-height:1.65}
+        .article-preview .lede{font-size:19px;color:var(--text-muted);margin-bottom:18px;line-height:1.65;transition:color 0.3s}
 
         .read-more{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:#dc2626;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
         .read-more:hover{color:#b91c1c}
@@ -118,8 +123,8 @@
 
         .no-results{display:none;text-align:center;padding:60px 20px;font-family:'Inter',sans-serif}
         .no-results.visible{display:block}
-        .no-results h3{font-size:20px;font-weight:700;color:#374151;margin-bottom:8px}
-        .no-results p{color:#6b7280;font-size:15px}
+        .no-results h3{font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px}
+        .no-results p{color:var(--text-muted);font-size:15px}
 
         .newsletter{background:#1a1a1a;border-radius:8px;padding:32px;margin-top:48px;text-align:center}
         .newsletter h3{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px;color:#fff}
@@ -129,9 +134,9 @@
         .newsletter-form button{background:#dc2626;color:#fff;border:none;padding:12px 20px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer}
         .newsletter-form button:hover{background:#b91c1c}
 
-        footer{max-width:960px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid #e5e5e5;margin-top:24px}
-        footer p{font-family:'Inter',sans-serif;color:#888;font-size:13px}
-        footer a{color:#666;text-decoration:none}
+        footer{max-width:960px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid var(--border);margin-top:24px;transition:border-color 0.3s}
+        footer p{font-family:'Inter',sans-serif;color:var(--text-light);font-size:13px}
+        footer a{color:var(--text-muted);text-decoration:none}
         footer a:hover{color:#dc2626}
 
         @media(max-width:600px){
@@ -180,6 +185,7 @@
             <div class="header-search">
                 <input type="text" id="search-input" placeholder="Search by name (e.g., Musk, Clinton, Bannon...)" aria-label="Search articles">
                 <button type="button" id="search-btn">Search</button>
+                <button type="button" id="dark-toggle" class="dark-toggle" aria-label="Toggle dark mode">🌙</button>
             </div>
         </div>
     </header>
@@ -205,6 +211,7 @@
                                 <a href="?search=musk" class="article-tag">Musk</a>
                             </div>
                             <time datetime="2026-02-02" class="article-date">February 2, 2026</time>
+                            <span class="reading-time">· 4 min read</span>
                         </div>
                         <h2><a href="musk-epstein-emails.html">"What Day Will Be the Wildest Party?" Elon Musk's Desperate Texts to Epstein Exposed</a></h2>
                     </div>
@@ -226,6 +233,7 @@
                                 <a href="?search=trump" class="article-tag">Trump</a>
                             </div>
                             <time datetime="2026-02-01" class="article-date">February 1, 2026</time>
+                            <span class="reading-time">· 5 min read</span>
                         </div>
                         <h2><a href="bannon-epstein-texts.html">Steve Bannon Got a Free Apple Watch, Private Planes, and Hundreds of Texts from Epstein</a></h2>
                     </div>
@@ -246,6 +254,7 @@
                                 <a href="?search=lutnick" class="article-tag">Lutnick</a>
                             </div>
                             <time datetime="2026-01-31" class="article-date">January 31, 2026</time>
+                            <span class="reading-time">· 3 min read</span>
                         </div>
                         <h2><a href="lutnick-yacht-island.html">Commerce Secretary Lutnick Brought His Kids to Epstein's Island on a Yacht. He Said He Cut Ties in 2005.</a></h2>
                     </div>
@@ -269,6 +278,7 @@
                                 <a href="?search=stephanopoulos" class="article-tag">Stephanopoulos</a>
                             </div>
                             <time datetime="2026-01-31" class="article-date">January 31, 2026</time>
+                            <span class="reading-time">· 4 min read</span>
                         </div>
                         <h2><a href="prince-andrew-dinner.html">The Dinner Party: Prince Andrew, Woody Allen, Katie Couric—All at Epstein's House</a></h2>
                     </div>
@@ -289,6 +299,7 @@
                                 <a href="?search=clinton" class="article-tag">Clinton</a>
                             </div>
                             <time datetime="2026-01-30" class="article-date">January 30, 2026</time>
+                            <span class="reading-time">· 3 min read</span>
                         </div>
                         <h2><a href="clinton-plane-trips.html">"32 Plane Trips": The Clinton-Epstein Connection in Black and White</a></h2>
                     </div>
@@ -320,6 +331,32 @@
 
     <script>
         (function() {
+            // Dark mode toggle
+            const darkToggle = document.getElementById('dark-toggle');
+            const html = document.documentElement;
+
+            // Check for saved preference or system preference
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                html.setAttribute('data-theme', 'dark');
+                darkToggle.textContent = '☀️';
+            }
+
+            darkToggle.addEventListener('click', () => {
+                const isDark = html.getAttribute('data-theme') === 'dark';
+                if (isDark) {
+                    html.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    darkToggle.textContent = '🌙';
+                } else {
+                    html.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    darkToggle.textContent = '☀️';
+                }
+            });
+
             const searchInput = document.getElementById('search-input');
             const searchBtn = document.getElementById('search-btn');
             const clearFromNoResults = document.getElementById('clear-from-no-results');
