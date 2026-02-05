@@ -335,11 +335,10 @@
             const darkToggle = document.getElementById('dark-toggle');
             const html = document.documentElement;
 
-            // Check for saved preference or system preference
+            // Only use dark mode if explicitly saved
             const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            if (savedTheme === 'dark') {
                 html.setAttribute('data-theme', 'dark');
                 darkToggle.textContent = '☀️';
             }
