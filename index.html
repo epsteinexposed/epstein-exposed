@@ -56,20 +56,20 @@
         .skip-link{position:absolute;top:-40px;left:0;background:#dc2626;color:#fff;padding:8px 16px;z-index:100;font-family:'Inter',sans-serif;font-size:14px;text-decoration:none}
         .skip-link:focus{top:0}
 
-        header{background:#fafafa;padding:24px 0}
-        .header-inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-        .header-search{display:flex;gap:8px;flex:1;max-width:420px}
-        .header-search input{flex:1;padding:10px 14px;border:1px solid #e5e5e5;border-radius:6px;font-size:14px;font-family:'Inter',sans-serif;background:#fff}
+        header{background:#fafafa;padding:20px 0;position:sticky;top:0;z-index:50;border-bottom:1px solid #e5e5e5}
+        .header-inner{max-width:960px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+        .header-search{display:flex;gap:10px;flex:1;max-width:480px}
+        .header-search input{flex:1;padding:14px 18px;border:1px solid #e5e5e5;border-radius:8px;font-size:16px;font-family:'Inter',sans-serif;background:#fff}
         .header-search input:focus{outline:none;border-color:#dc2626}
         .header-search input::placeholder{color:#9ca3af}
-        .header-search button{background:#dc2626;color:#fff;border:none;padding:10px 16px;border-radius:6px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer}
+        .header-search button{background:#dc2626;color:#fff;border:none;padding:14px 22px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:15px;cursor:pointer}
         .header-search button:hover{background:#b91c1c}
-        .logo{display:flex;align-items:center;gap:14px;text-decoration:none}
-        .logo-icon{width:56px;height:56px;background:#1a1a1a;border-radius:8px;display:flex;align-items:center;justify-content:center;position:relative}
-        .logo-icon svg{width:50px;height:50px}
-        .logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:#1a1a1a;display:flex;flex-direction:column;line-height:1.1}
-        .logo-text .redact-bar{height:5px;background:#dc2626;margin-top:3px;width:100%}
-        .logo-text .exposed{font-family:'Courier New',monospace;font-size:10px;font-weight:700;color:#dc2626;letter-spacing:0.5px}
+        .logo{display:flex;align-items:center;gap:16px;text-decoration:none}
+        .logo-icon{width:68px;height:68px;background:#1a1a1a;border-radius:10px;display:flex;align-items:center;justify-content:center;position:relative}
+        .logo-icon svg{width:60px;height:60px}
+        .logo-text{font-family:'Inter',sans-serif;font-size:26px;font-weight:800;color:#1a1a1a;display:flex;flex-direction:column;line-height:1.1}
+        .logo-text .redact-bar{height:6px;background:#dc2626;margin-top:4px;width:100%}
+        .logo-text .exposed{font-family:'Courier New',monospace;font-size:12px;font-weight:700;color:#dc2626;letter-spacing:0.5px}
 
         main{max-width:960px;margin:0 auto;padding:48px 24px}
 
@@ -98,11 +98,11 @@
         .article-tag:hover{background:#dc2626}
         .article-date{color:#888}
 
-        .article-preview h2{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;line-height:1.2;margin-bottom:12px;letter-spacing:-.3px}
+        .article-preview h2{font-family:'Inter',sans-serif;font-size:28px;font-weight:800;line-height:1.2;margin-bottom:14px;letter-spacing:-.3px}
         .article-preview h2 a{text-decoration:none;color:#1a1a1a}
         .article-preview h2 a:hover{color:#dc2626}
 
-        .article-preview .lede{font-size:17px;color:#444;margin-bottom:16px;line-height:1.6}
+        .article-preview .lede{font-size:19px;color:#444;margin-bottom:18px;line-height:1.65}
 
         .read-more{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:#dc2626;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
         .read-more:hover{color:#b91c1c}
@@ -128,22 +128,24 @@
         footer a:hover{color:#dc2626}
 
         @media(max-width:600px){
-            .header-inner{padding:0 16px}
-            .logo-icon{width:48px;height:48px}
-            .logo-icon svg{width:42px;height:42px}
-            .logo-text{font-size:18px}
-            .logo-text .redact-bar{height:4px}
-            .logo-text .exposed{font-size:9px}
+            header{padding:16px 0}
+            .header-inner{padding:0 16px;gap:12px}
+            .logo-icon{width:52px;height:52px}
+            .logo-icon svg{width:46px;height:46px}
+            .logo-text{font-size:20px}
+            .logo-text .redact-bar{height:5px}
+            .logo-text .exposed{font-size:10px}
             main{padding:32px 16px}
             .intro h1{font-size:28px}
             .intro h1::after{width:60px;height:3px;margin-top:16px}
             .intro p{font-size:16px}
             .header-search{max-width:100%;order:3;width:100%}
-            .header-search input{flex:1}
+            .header-search input{flex:1;padding:12px 14px;font-size:15px}
+            .header-search button{padding:12px 18px;font-size:14px}
             .article-preview{padding:16px;margin-bottom:24px}
             .article-preview.featured .article-top{grid-template-columns:1fr}
-            .article-preview h2{font-size:20px}
-            .article-preview .lede{font-size:15px}
+            .article-preview h2{font-size:22px}
+            .article-preview .lede{font-size:16px}
             .article-tag{padding:3px 8px;font-size:10px}
             .newsletter{padding:24px 16px}
             .newsletter-form{flex-direction:column}
