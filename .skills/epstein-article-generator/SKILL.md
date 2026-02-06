@@ -1,14 +1,14 @@
 ---
 name: epstein-article-generator
 description: |
-  Generate new articles for Epstein Exposed website based on DOJ document releases.
+  Generate new articles for Epstein Files Daily website based on DOJ document releases.
   TRIGGERS: "write new article", "generate article", "publish article", "daily article", "epstein article"
   Finds interesting DOJ documents, writes SEO-optimized investigative articles, creates thumbnails, updates the site, and pushes to GitHub.
 ---
 
 # Epstein Article Generator
 
-Generate investigative journalism articles for epstein-exposed.com based on DOJ file releases.
+Generate investigative journalism articles for epsteinfilesdaily.com based on DOJ file releases.
 
 ## Workflow
 
@@ -102,7 +102,7 @@ def create_thumbnail(filename, doc_id, to_field, from_field, date_field, highlig
 
 **Save thumbnail to**: `images/[person-name]-[topic].png`
 
-**Update og:image in article**: `<meta property="og:image" content="https://epstein-exposed.com/images/[thumbnail-filename].png">`
+**Update og:image in article**: `<meta property="og:image" content="https://epsteinfilesdaily.com/images/[thumbnail-filename].png">`
 
 ### Step 6: Save Article
 
@@ -163,4 +163,4 @@ git push
 2. **Thumbnails**: Cream background, DOJ document style, LARGE text, red accent bar on left, NO logo
 3. **Tags**: Full names only (Firstname Lastname), NO company/country names
 4. **Image path**: `images/[name]-[topic].png` with cache-busting `?v=1`
-5. **og:image**: Point to `https://epstein-exposed.com/images/[thumbnail].png`
+5. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`

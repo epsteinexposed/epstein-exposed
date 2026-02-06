@@ -8,7 +8,7 @@ description: |
 
 # Photo Article Generator
 
-Generate investigative journalism articles for epstein-exposed.com based on photographs from DOJ releases.
+Generate investigative journalism articles for epsteinfilesdaily.com based on photographs from DOJ releases.
 
 ## Workflow Overview
 

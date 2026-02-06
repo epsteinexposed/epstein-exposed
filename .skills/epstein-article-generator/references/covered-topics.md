@@ -1,6 +1,6 @@
 # Covered Topics
 
-Articles already published on Epstein Exposed. **DO NOT repeat these stories.**
+Articles already published on Epstein Files Daily. **DO NOT repeat these stories.**
 
 ## Published Articles
 
@@ -63,7 +63,7 @@ Articles already published on Epstein Exposed. **DO NOT repeat these stories.**
 
 ### 1. Elon Musk - Emails requesting party invites
 - **File:** `musk-epstein-emails.html`
-- **Headline:** "What Day Will Be the Wildest Party?" Elon Musk's Desperate Texts to Epstein Exposed
+- **Headline:** "What Day Will Be the Wildest Party?" Elon Musk's Desperate Texts to Epstein Files Daily
 - **Published:** February 2, 2026
 - **Key Details:** 16+ emails between Musk and Epstein, Musk seeking invitations to private island
 - **Documents:** Email correspondence from DOJ files
