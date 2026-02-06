@@ -32,6 +32,9 @@
     <!-- Additional SEO Meta -->
     <meta name="theme-color" content="#dc2626">
 
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Epstein Exposed RSS Feed" href="https://epstein-exposed.com/feed.xml">
+
     <!-- Structured Data: WebSite -->
     <script type="application/ld+json">
     {
@@ -336,7 +339,7 @@
         <section class="newsletter" aria-labelledby="newsletter-heading">
             <h3 id="newsletter-heading">Get the Files in Your Inbox</h3>
             <p>New revelations as we find them. No spam. Just receipts.</p>
-            <form class="newsletter-form" action="#" method="post" aria-label="Newsletter signup">
+            <form class="newsletter-form" action="https://buttondown.email/api/emails/embed-subscribe/epsteinexposed" method="post" target="popupwindow" onsubmit="window.open('https://buttondown.email/epsteinexposed', 'popupwindow')" aria-label="Newsletter signup">
                 <label for="email-input" class="sr-only" style="position:absolute;left:-9999px">Email address</label>
                 <input type="email" id="email-input" name="email" placeholder="your@email.com" required autocomplete="email">
                 <button type="submit">Subscribe</button>
