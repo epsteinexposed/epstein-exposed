@@ -410,45 +410,71 @@ def update_covered_topics(data):
         print("Updated covered-topics.md")
 
 def main():
+    import time
+
+    NUM_ARTICLES = 5  # Generate 5 articles per day
+
     print("=" * 50)
     print("EPSTEIN EXPOSED - Daily Article Generator")
+    print(f"Generating {NUM_ARTICLES} articles...")
     print("=" * 50)
 
-    # Generate article content
-    article_data = generate_article()
+    successful = 0
+    failed = 0
 
-    if not article_data:
-        print("FAILED: Could not generate article")
-        return
+    for i in range(NUM_ARTICLES):
+        print(f"\n{'='*50}")
+        print(f"ARTICLE {i+1} of {NUM_ARTICLES}")
+        print(f"{'='*50}")
 
-    print(f"\nGenerated article: {article_data['headline']}")
-    print(f"Slug: {article_data['slug']}")
+        # Generate article content
+        article_data = generate_article()
 
-    # Create the HTML file
-    html = create_article_html(article_data)
-    filename = f"{article_data['slug']}.html"
-    write_file(filename, html)
-    print(f"Created: {filename}")
+        if not article_data:
+            print(f"FAILED: Could not generate article {i+1}")
+            failed += 1
+            continue
 
-    # Update index.html
-    update_index_html(article_data)
+        print(f"\nGenerated article: {article_data['headline']}")
+        print(f"Slug: {article_data['slug']}")
 
-    # Update RSS feed
-    update_feed_xml(article_data)
+        # Create the HTML file
+        html = create_article_html(article_data)
+        filename = f"{article_data['slug']}.html"
+        write_file(filename, html)
+        print(f"Created: {filename}")
 
-    # Update covered topics
-    update_covered_topics(article_data)
+        # Update index.html
+        update_index_html(article_data)
 
-    # Save article info for Twitter bot
-    latest_info = {
-        "headline": article_data['headline'],
-        "slug": article_data['slug'],
-        "date": article_data['date_iso']
-    }
-    write_file('latest_article.json', json.dumps(latest_info))
-    print("Saved latest_article.json for Twitter bot")
+        # Update RSS feed
+        update_feed_xml(article_data)
 
-    print("\n✅ Article generation complete!")
+        # Update covered topics
+        update_covered_topics(article_data)
+
+        successful += 1
+        print(f"\n✅ Article {i+1} complete!")
+
+        # Small delay between articles to avoid rate limiting
+        if i < NUM_ARTICLES - 1:
+            print("Waiting 5 seconds before next article...")
+            time.sleep(5)
+
+    # Save info about last article for reference
+    if article_data:
+        latest_info = {
+            "headline": article_data['headline'],
+            "slug": article_data['slug'],
+            "date": article_data['date_iso']
+        }
+        write_file('latest_article.json', json.dumps(latest_info))
+
+    print(f"\n{'='*50}")
+    print(f"GENERATION COMPLETE")
+    print(f"✅ Successful: {successful}")
+    print(f"❌ Failed: {failed}")
+    print(f"{'='*50}")
 
 if __name__ == "__main__":
     main()
