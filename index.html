@@ -66,9 +66,41 @@
         /* BOLD HEADER */
         header[role="banner"]{background:#000;border-bottom:4px solid var(--accent);position:sticky;top:0;z-index:100}
         .header-inner{display:flex;align-items:center;justify-content:space-between;padding:0 0 0 0}
-        .header-controls{display:flex;gap:8px;align-items:center;padding-right:20px}
-        .dark-toggle{display:none}
+        .header-controls{display:flex;gap:12px;align-items:center;padding-right:20px}
+        .theme-toggle{background:#333;color:#fff;border:none;padding:10px 14px;font-family:'Inter',sans-serif;font-weight:600;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background 0.2s}
+        .theme-toggle:hover{background:var(--accent)}
+        .theme-toggle svg{width:16px;height:16px}
         .mobile-filter-toggle{display:none;background:var(--accent);color:#fff;border:none;padding:12px 20px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+
+        /* LIGHT THEME */
+        html.light-mode{--bg:#f5f5f5;--bg-card:#fff;--text:#1a1a1a;--text-muted:#555;--text-light:#777;--border:#ddd;--search-bg:#fff;--sidebar-bg:#eee}
+        html.light-mode header[role="banner"]{background:#fff;border-bottom-color:var(--accent)}
+        html.light-mode .logo{background:var(--accent)}
+        html.light-mode .header-search input{background:#f0f0f0;color:#1a1a1a}
+        html.light-mode .header-search input:focus{background:#fff}
+        html.light-mode .header-search input::placeholder{color:#888}
+        html.light-mode .trending-name{background:#e0e0e0;color:#1a1a1a}
+        html.light-mode .breaking-bar{background:#fff;border-bottom-color:#ddd}
+        html.light-mode .breaking-text{color:#555}
+        html.light-mode .sidebar{background:#eee;border-right-color:#ddd}
+        html.light-mode .sidebar-section{border-bottom-color:#ddd}
+        html.light-mode .sidebar-search input{background:#fff;border-color:#ccc;color:#1a1a1a}
+        html.light-mode .sidebar-search input::placeholder{color:#888}
+        html.light-mode .tag-filter{color:#555}
+        html.light-mode .tag-filter:hover{background:#ddd;color:#1a1a1a}
+        html.light-mode .tag-filter .count{background:#ddd;color:#555}
+        html.light-mode .recent-article{border-bottom-color:#ddd}
+        html.light-mode .recent-article-title{color:#555}
+        html.light-mode .archive-link{color:#555}
+        html.light-mode .archive-link:hover{background:#ddd;color:#1a1a1a}
+        html.light-mode .article-preview{border-bottom-color:#ddd}
+        html.light-mode .article-preview:hover{background:#fff}
+        html.light-mode .article-preview h2 a{color:#1a1a1a}
+        html.light-mode .article-preview .lede{color:#555}
+        html.light-mode .article-preview .article-thumb{border-color:#ccc}
+        html.light-mode .results-count{background:#fff;border-bottom-color:#ddd}
+        html.light-mode footer{background:#fff;border-top-color:#ddd}
+        html.light-mode .theme-toggle{background:#e0e0e0;color:#1a1a1a}
 
         /* BIG BOLD LOGO */
         .logo{display:flex;align-items:center;gap:0;text-decoration:none;background:var(--accent);padding:12px 24px;transition:background 0.2s;flex-shrink:0}
@@ -80,8 +112,8 @@
 
         /* HEADER CENTER - SEARCH + TRENDING */
         .header-center{flex:1;display:flex;align-items:center;gap:20px;padding:0 24px}
-        .header-search{display:flex;gap:0;max-width:320px}
-        .header-search input{flex:1;padding:10px 14px;border:none;background:#1a1a1a;color:#fff;font-size:14px;font-family:'Inter',sans-serif;min-width:180px}
+        .header-search{display:flex;gap:0;max-width:450px;flex:1}
+        .header-search input{flex:1;padding:10px 14px;border:none;background:#1a1a1a;color:#fff;font-size:14px;font-family:'Inter',sans-serif;min-width:280px}
         .header-search input:focus{outline:none;background:#252525}
         .header-search input::placeholder{color:#666}
         .header-search button{background:#333;color:#fff;border:none;padding:10px 16px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
@@ -124,9 +156,6 @@
         .tag-filter.active{background:var(--accent);color:#fff;border-left-color:var(--accent)}
         .tag-filter .count{font-size:11px;color:#666;background:#252525;padding:2px 6px}
         .tag-filter.active .count{background:rgba(0,0,0,0.3);color:#fff}
-        .show-more-tags{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer;padding:8px 10px;font-weight:600;text-align:left}
-        .show-more-tags:hover{text-decoration:underline}
-        .tag-filter.hidden{display:none}
         .clear-filter{font-size:12px;color:var(--text-muted);background:none;border:none;cursor:pointer;padding:8px 10px;text-align:left}
         .clear-filter:hover{color:var(--accent)}
 
@@ -257,6 +286,11 @@
                 </div>
             </div>
             <div class="header-controls">
+                <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Toggle light/dark mode">
+                    <svg id="theme-icon-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg id="theme-icon-light" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display:none"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    <span id="theme-text">LIGHT</span>
+                </button>
                 <button type="button" id="mobile-filter-toggle" class="mobile-filter-toggle">☰ FILTER</button>
             </div>
         </div>
@@ -571,6 +605,31 @@
 
     <script>
         (function() {
+            // Theme toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeText = document.getElementById('theme-text');
+            const themeIconDark = document.getElementById('theme-icon-dark');
+            const themeIconLight = document.getElementById('theme-icon-light');
+            const html = document.documentElement;
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'light') {
+                html.classList.add('light-mode');
+                themeText.textContent = 'DARK';
+                themeIconDark.style.display = 'none';
+                themeIconLight.style.display = 'block';
+            }
+
+            themeToggle.addEventListener('click', () => {
+                html.classList.toggle('light-mode');
+                const isLight = html.classList.contains('light-mode');
+                themeText.textContent = isLight ? 'DARK' : 'LIGHT';
+                themeIconDark.style.display = isLight ? 'none' : 'block';
+                themeIconLight.style.display = isLight ? 'block' : 'none';
+                localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            });
+
             // Mobile filter toggle
             const mobileFilterToggle = document.getElementById('mobile-filter-toggle');
             const sidebar = document.getElementById('sidebar');
@@ -622,15 +681,14 @@
                 }
             });
 
-            // Sort tags by count (descending)
-            const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
-            const MAX_VISIBLE_TAGS = 10;
+            // Sort tags alphabetically
+            const sortedTags = Object.entries(tagCounts).sort((a, b) => a[0].localeCompare(b[0]));
 
-            // Render tag filters
-            sortedTags.forEach(([tag, count], index) => {
+            // Render all tag filters (no limit)
+            sortedTags.forEach(([tag, count]) => {
                 const tagEl = document.createElement('a');
                 tagEl.href = '#';
-                tagEl.className = 'tag-filter' + (index >= MAX_VISIBLE_TAGS ? ' hidden' : '');
+                tagEl.className = 'tag-filter';
                 tagEl.dataset.tag = tag;
                 const displayName = tag.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
                 tagEl.innerHTML = `<span>${displayName}</span><span class="count">${count}</span>`;
@@ -646,18 +704,6 @@
                 });
                 tagFiltersContainer.appendChild(tagEl);
             });
-
-            // Add "Show more" button if needed
-            if (sortedTags.length > MAX_VISIBLE_TAGS) {
-                const showMoreBtn = document.createElement('button');
-                showMoreBtn.className = 'show-more-tags';
-                showMoreBtn.textContent = `+ ${sortedTags.length - MAX_VISIBLE_TAGS} more`;
-                showMoreBtn.addEventListener('click', () => {
-                    document.querySelectorAll('.tag-filter.hidden').forEach(el => el.classList.remove('hidden'));
-                    showMoreBtn.style.display = 'none';
-                });
-                tagFiltersContainer.appendChild(showMoreBtn);
-            }
 
             // Update active tag styling
             function updateActiveTag(activeTag) {
