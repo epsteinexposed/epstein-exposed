@@ -1,0 +1,14 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circular background -->
+  <circle cx="200" cy="200" r="200" fill="#1a1a1a"/>
+
+  <!-- EE Text - centered -->
+  <text x="200" y="210" font-size="140" font-family="Arial,sans-serif" font-weight="bold" fill="white" text-anchor="middle">EE</text>
+
+  <!-- Red redaction bar - centered under text -->
+  <rect x="80" y="230" width="240" height="30" fill="#dc2626"/>
+
+  <!-- Small magnifying glass in corner -->
+  <circle cx="300" cy="100" r="30" fill="none" stroke="white" stroke-width="8"/>
+  <line x1="322" y1="122" x2="345" y2="145" stroke="white" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="400" rx="40" fill="#1a1a1a"/>
+
+  <!-- EE Text -->
+  <text x="32" y="232" font-size="160" font-family="Arial,sans-serif" font-weight="bold" fill="white">EE</text>
+
+  <!-- Magnifying glass circle -->
+  <circle cx="312" cy="272" r="56" fill="none" stroke="white" stroke-width="16"/>
+
+  <!-- Magnifying glass handle -->
+  <line x1="352" y1="312" x2="384" y2="344" stroke="white" stroke-width="16" stroke-linecap="round"/>
+
+  <!-- Red redaction bar -->
+  <rect x="32" y="288" width="240" height="40" fill="#dc2626"/>
+</svg>
