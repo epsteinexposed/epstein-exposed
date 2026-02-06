@@ -146,13 +146,6 @@
         .ad-slot-size{font-size:13px;color:var(--text-muted)}
         .ad-slot.leaderboard{min-height:90px;display:flex;flex-direction:column;justify-content:center}
         .ad-slot.in-feed{min-height:120px;display:flex;flex-direction:column;justify-content:center}
-        .sticky-footer-ad{position:fixed;bottom:0;left:0;right:0;background:var(--bg-card);border-top:1px solid var(--border);padding:10px;text-align:center;z-index:40;display:flex;justify-content:center;align-items:center;gap:16px;transition:background 0.3s,border-color 0.3s}
-        .sticky-footer-ad .ad-slot{margin:0;border:2px dashed var(--border);padding:8px 40px;min-height:60px}
-        .sticky-footer-ad .close-ad{background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-light);padding:4px 8px}
-        .sticky-footer-ad .close-ad:hover{color:var(--text)}
-        .sticky-footer-ad.hidden{display:none}
-        body.has-sticky-ad{padding-bottom:80px}
-
         footer{max-width:960px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid var(--border);margin-top:24px;transition:border-color 0.3s}
         footer p{font-family:'Inter',sans-serif;color:var(--text-light);font-size:13px}
         footer a{color:var(--text-muted);text-decoration:none}
@@ -218,29 +211,6 @@
         <div class="results-count" id="results-count"></div>
 
         <div id="articles-container">
-            <!-- PHOTO ARTICLE: MICK JAGGER / CLINTON / EPSTEIN -->
-            <article class="article-preview featured" data-tags="mick jagger,bill clinton">
-                <div class="article-top">
-                    <a href="mick-jagger-clinton-epstein-photo.html" class="article-thumb">
-                        <img src="images/mick-jagger-clinton-epstein.png?v=1" alt="DOJ photo shows Mick Jagger seated between Jeffrey Epstein and Bill Clinton" loading="lazy">
-                    </a>
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <span class="article-tag" style="background:#7c3aed">📷 Photo</span>
-                                <a href="?search=mick+jagger" class="article-tag">Mick Jagger</a>
-                                <a href="?search=bill+clinton" class="article-tag">Bill Clinton</a>
-                            </div>
-                            <time datetime="2026-02-06" class="article-date">February 6, 2026</time>
-                            <span class="reading-time">· 4 min read</span>
-                        </div>
-                        <h2><a href="mick-jagger-clinton-epstein-photo.html">PHOTO: Mick Jagger Seated Between Jeffrey Epstein and Bill Clinton at Dinner</a></h2>
-                    </div>
-                </div>
-                <p class="lede">A never-before-seen photograph released by the DOJ shows the Rolling Stones frontman at a table with the convicted sex offender and former President.</p>
-                <a href="mick-jagger-clinton-epstein-photo.html" class="read-more">Read full article</a>
-            </article>
-
             <!-- AUTO-GENERATED ARTICLE: JAMES GORMAN -->
             <article class="article-preview featured" data-tags="james gorman">
                 <div class="article-top">
@@ -501,11 +471,6 @@
         <p>&copy; 2026 Epstein Exposed · <a href="archive.html">Archive</a> · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a></p>
     </footer>
 
-    <!-- Sticky Footer Ad -->
-    <div class="sticky-footer-ad" id="sticky-ad">
-        <button class="close-ad" id="close-sticky-ad" aria-label="Close advertisement">×</button>
-    </div>
-
     <script>
         (function() {
             // Dark mode toggle
@@ -531,18 +496,6 @@
                     localStorage.setItem('theme', 'dark');
                     darkToggle.textContent = '☀️';
                 }
-            });
-
-            // Sticky footer ad
-            const stickyAd = document.getElementById('sticky-ad');
-            const closeStickyAd = document.getElementById('close-sticky-ad');
-
-            // Add body padding for sticky ad
-            document.body.classList.add('has-sticky-ad');
-
-            closeStickyAd.addEventListener('click', () => {
-                stickyAd.classList.add('hidden');
-                document.body.classList.remove('has-sticky-ad');
             });
 
             const searchInput = document.getElementById('search-input');
