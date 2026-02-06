@@ -4,6 +4,46 @@ Articles already published on Epstein Exposed. **DO NOT repeat these stories.**
 
 ## Published Articles
 
+### 19. JamesGorman - Morgan Stanley CEO James Gorman's Secret Epstein M...
+- **File:** `morgan-stanley-james-gorman-epstein-meetings.html`
+- **Headline:** Morgan Stanley CEO James Gorman's Secret Epstein Meetings: Wall Street's Hidden Scandal
+- **Published:** February 06, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 18. GlennDubin - Billionaire Glenn Dubin's Wife Eva Let Epstein Liv...
+- **File:** `glenn-dubin-epstein-family-ties.html`
+- **Headline:** Billionaire Glenn Dubin's Wife Eva Let Epstein Live in Their Home After Prison - Shocking Family Ties Exposed
+- **Published:** February 06, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 17. ThomasPritzker - Hyatt Hotels Heir Thomas Pritzker's Secret Epstein...
+- **File:** `thomas-pritzker-hyatt-epstein-connections.html`
+- **Headline:** Hyatt Hotels Heir Thomas Pritzker's Secret Epstein Business Deals Exposed in DOJ Files
+- **Published:** February 06, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 16. ReidHoffman - LinkedIn Founder Reid Hoffman's $2 Million Mystery...
+- **File:** `reid-hoffman-linkedin-epstein-donations.html`
+- **Headline:** LinkedIn Founder Reid Hoffman's $2 Million Mystery: Secret Epstein Donations Exposed
+- **Published:** February 06, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 15. EhudBarak - Former Israeli PM Ehud Barak's Secret Epstein Meet...
+- **File:** `ehud-barak-epstein-meetings.html`
+- **Headline:** Former Israeli PM Ehud Barak's Secret Epstein Meetings: 'I Need to See You Urgently'
+- **Published:** February 06, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
 ### 13. LeonBlack - Apollo CEO Leon Black Paid Epstein $158 Million fo...
 - **File:** `leon-black-apollo-payments.html`
 - **Headline:** Apollo CEO Leon Black Paid Epstein $158 Million for 'Tax Advice' - DOJ Files Reveal Shocking Details

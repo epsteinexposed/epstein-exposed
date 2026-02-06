@@ -327,35 +327,31 @@ def update_index_html(data):
 
     index_content = read_file('index.html')
 
-    # Create article card matching the site's actual structure
+    # Find the articles container and add the new article at the top
     new_article_card = f'''
-            <!-- AUTO-GENERATED ARTICLE: {data['tag'].upper()} -->
-            <article class="article-preview featured" data-tags="{data['tag'].lower()}">
-                <div class="article-top">
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search={data['tag'].lower()}" class="article-tag">{data['tag']}</a>
-                            </div>
-                            <time datetime="{data['date_iso']}" class="article-date">{data['date_readable']}</time>
-                            <span class="reading-time">· {data.get('reading_time', 4)} min read</span>
-                        </div>
-                        <h2><a href="{data['slug']}.html">{data['headline']}</a></h2>
+                <article class="article-card" data-tags="{data['tag'].lower()}">
+                    <div class="article-tags">
+                        <span class="article-tag">{data['tag']}</span>
                     </div>
-                </div>
-                <p class="lede">{data['meta_description']}</p>
-                <a href="{data['slug']}.html" class="read-more">Read full article</a>
-            </article>
+                    <a href="{data['slug']}.html">
+                        <h2>{data['headline']}</h2>
+                    </a>
+                    <p class="article-excerpt">{data['meta_description']}</p>
+                    <div class="article-meta">
+                        <time datetime="{data['date_iso']}">{data['date_readable']}</time>
+                        <span class="reading-time">{data.get('reading_time', 4)} min read</span>
+                    </div>
+                </article>
 '''
 
-    # Insert after the articles-container opening
-    marker = '<div id="articles-container">'
+    # Insert after the opening of the articles container
+    marker = '<div class="articles" id="articles">'
     if marker in index_content:
         index_content = index_content.replace(marker, marker + new_article_card)
         write_file('index.html', index_content)
         print(f"Updated index.html with new article")
     else:
-        print("WARNING: Could not find articles-container in index.html")
+        print("WARNING: Could not find articles container in index.html")
 
 def update_feed_xml(data):
     """Add the new article to the RSS feed."""
