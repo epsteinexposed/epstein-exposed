@@ -4,6 +4,15 @@ Articles already published on Epstein Exposed. **DO NOT repeat these stories.**
 
 ## Published Articles
 
+### 20. MickJagger/BillClinton - PHOTO: Mick Jagger Seated Between Epstein and Clinton
+- **File:** `mick-jagger-clinton-epstein-photo.html`
+- **Type:** 📷 PHOTO ARTICLE
+- **Headline:** PHOTO: Mick Jagger Seated Between Jeffrey Epstein and Bill Clinton at Dinner
+- **Published:** February 06, 2026
+- **Key Details:** Never-before-seen photograph from DOJ release showing Jagger, Epstein, and Clinton at dinner table
+- **Documents:** DOJ Data Set 1 - Images from Epstein Properties
+
+
 ### 19. JamesGorman - Morgan Stanley CEO James Gorman's Secret Epstein M...
 - **File:** `morgan-stanley-james-gorman-epstein-meetings.html`
 - **Headline:** Morgan Stanley CEO James Gorman's Secret Epstein Meetings: Wall Street's Hidden Scandal
