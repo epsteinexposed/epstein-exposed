@@ -20,112 +20,135 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a1a' rx='15' width='100' height='100'/><circle cx='42' cy='42' r='32' fill='%232a2a2a' stroke='white' stroke-width='3'/><text x='42' y='48' font-size='28' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>EF</text><rect x='18' y='52' width='48' height='6' fill='%23dc2626'/><line x1='66' y1='66' x2='88' y2='88' stroke='white' stroke-width='6' stroke-linecap='round'/></svg>">
 
-    <style>
+        <style>
+        :root{--bg:#1f1f1f;--bg-card:#252525;--text:#fff;--text-muted:#b0b0b0;--text-light:#777;--border:#333;--accent:#dc2626}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Newsreader',Georgia,serif;background:#fafafa;color:#1a1a1a;line-height:1.7}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
         a{color:inherit}
-        header{background:#fff;border-bottom:1px solid #e5e5e5;padding:24px 0}
-        .header-inner{max-width:720px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
-        .logo{display:flex;align-items:center;gap:14px;text-decoration:none}
-        .logo-icon{width:56px;height:56px;background:#1a1a1a;border-radius:8px;display:flex;align-items:center;justify-content:center}
-        .logo-icon svg{width:50px;height:50px}
-        .logo-text{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:#1a1a1a;display:flex;flex-direction:column;line-height:1.1}
-        .logo-text .redact-bar{height:5px;background:#dc2626;margin-top:3px;width:100%}
-        .logo-text .daily{font-family:'Courier New',monospace;font-size:10px;font-weight:700;color:#dc2626;letter-spacing:0.5px}
-        nav a{font-family:'Inter',sans-serif;color:#666;text-decoration:none;font-size:14px;font-weight:500;margin-left:24px}
-        nav a:hover{color:#dc2626}
-        main{max-width:720px;margin:0 auto;padding:48px 24px}
-        .back-link{font-family:'Inter',sans-serif;font-size:14px;color:#666;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px}
-        .back-link:hover{color:#dc2626}
-        article.article{margin-bottom:56px}
-        .article-meta{font-family:'Inter',sans-serif;font-size:12px;color:#888;margin-bottom:12px;display:flex;align-items:center;gap:12px;text-transform:uppercase;letter-spacing:.5px}
+
+        header{background:#000;border-bottom:4px solid var(--accent);padding:0;position:sticky;top:0;z-index:100}
+        .header-inner{max-width:900px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+        .logo{display:flex;align-items:center;gap:0;text-decoration:none;background:var(--accent);padding:12px 24px;margin-left:-24px;transition:background 0.2s}
+        .logo:hover{background:#b91c1c}
+        .logo-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center}
+        .logo-icon svg{width:48px;height:48px}
+        .logo-text{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:#fff;display:flex;flex-direction:column;line-height:1;text-transform:uppercase;letter-spacing:1px}
+        .logo-text .daily{font-size:11px;font-weight:600;letter-spacing:3px;opacity:0.9;margin-top:2px}
+        nav a{font-family:'Inter',sans-serif;color:var(--text-muted);text-decoration:none;font-size:13px;font-weight:600;margin-left:24px;text-transform:uppercase;letter-spacing:1px}
+        nav a:hover{color:var(--accent)}
+
+        main{max-width:900px;margin:0 auto;padding:32px 24px}
+
+        .back-link{font-family:'Inter',sans-serif;font-size:13px;color:var(--accent);text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+        .back-link:hover{color:#fff}
+
+        article.article{margin-bottom:40px}
+        .article-meta{font-family:'Inter',sans-serif;font-size:11px;color:var(--text-light);margin-bottom:12px;display:flex;align-items:center;gap:12px;text-transform:uppercase;letter-spacing:.5px}
         .article-tags{display:flex;flex-wrap:wrap;gap:6px;margin-right:8px}
-        .article-tag{background:#1e293b;color:#fff;padding:4px 12px;border-radius:4px;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.3px;text-decoration:none;transition:background 0.2s}
-        .article-tag:hover{background:#dc2626}
-        article.article h1{font-family:'Inter',sans-serif;font-size:32px;font-weight:800;line-height:1.2;margin-bottom:16px;letter-spacing:-.5px}
-        article.article .lede{font-size:20px;color:#333;margin-bottom:20px;font-style:italic}
-        article.article p{font-size:17px;margin-bottom:16px;color:#2a2a2a}
-        article.article strong{color:#000}
-        article.article h3{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;margin:28px 0 12px;color:#dc2626;text-transform:uppercase;letter-spacing:.5px}
-        .pull-quote{border-left:4px solid #dc2626;padding:16px 24px;margin:24px 0;background:#fef2f2;font-size:19px;font-style:italic;color:#333}
-        .response-box{background:#f3f4f6;border-radius:8px;padding:20px;margin:20px 0}
-        .response-box .label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-        .response-box p{margin-bottom:0;font-style:italic}
-        .source-box{background:#1e293b;border-radius:8px;padding:20px;margin:24px 0 0}
-        .source-box .label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+        .article-tag{background:var(--accent);color:#fff;padding:4px 10px;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;text-decoration:none;transition:background 0.2s}
+        .article-tag:hover{background:#b91c1c}
+
+        article.article h1{font-family:'Oswald',sans-serif;font-size:38px;font-weight:700;line-height:1.1;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
+        article.article .lede{font-size:18px;color:var(--text-muted);margin-bottom:24px;line-height:1.6}
+        article.article p{font-size:16px;margin-bottom:16px;color:var(--text-muted);line-height:1.7}
+        article.article strong{color:#fff}
+
+        .pull-quote{border-left:4px solid var(--accent);padding:16px 24px;margin:24px 0;background:#292929;font-size:18px;font-style:italic;color:#fff}
+
+        article.article h3{font-family:'Oswald',sans-serif;font-size:20px;font-weight:700;margin:32px 0 16px;color:var(--accent);text-transform:uppercase;letter-spacing:1px}
+
+        .response-box{background:#292929;border:1px solid var(--border);padding:20px;margin:20px 0}
+        .response-box .label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+        .response-box p{margin-bottom:0;font-style:italic;color:var(--text-muted)}
+
+        .source-box{background:#000;border:1px solid var(--border);padding:20px;margin:32px 0 0}
+        .source-box .label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
         .source-box ul{list-style:none;margin:0;padding:0}
         .source-box li{margin-bottom:8px}
         .source-box a{color:#60a5fa;text-decoration:none;font-family:'Inter',sans-serif;font-size:14px}
         .source-box a:hover{text-decoration:underline;color:#93c5fd}
-        .source-box .doj-link{display:inline-block;background:#dc2626;color:#fff;padding:8px 16px;border-radius:6px;font-weight:600;margin-top:12px}
+        .source-box .doj-link{display:inline-block;background:var(--accent);color:#fff;padding:10px 20px;font-weight:700;margin-top:12px;text-transform:uppercase;letter-spacing:1px;font-size:13px}
         .source-box .doj-link:hover{background:#b91c1c;text-decoration:none}
-        .share-section{margin:32px 0;padding:24px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0}
-        .share-section .share-label{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+
+        .share-section{margin:32px 0;padding:24px;background:#292929;border:1px solid var(--border)}
+        .share-section .share-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
         .share-buttons{display:flex;flex-wrap:wrap;gap:10px}
-        .share-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s}
+        .share-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:all 0.2s;text-transform:uppercase;letter-spacing:0.5px}
         .share-btn svg{width:18px;height:18px}
-        .share-btn.twitter{background:#000;color:#fff}
+        .share-btn.twitter{background:#000;color:#fff;border:1px solid #333}
         .share-btn.twitter:hover{background:#333}
         .share-btn.bluesky{background:#0085ff;color:#fff}
         .share-btn.bluesky:hover{background:#0066cc}
         .share-btn.facebook{background:#1877f2;color:#fff}
         .share-btn.facebook:hover{background:#0d65d9}
-        .share-btn.email{background:#64748b;color:#fff}
-        .share-btn.email:hover{background:#475569}
-        .doc-evidence{margin:24px 0;background:#fff;border:1px solid #d1d5db;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-        .doc-evidence .doc-header{background:#374151;color:#fff;padding:10px 16px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
-        .doc-evidence .doc-header .doc-id{color:#9ca3af}
-        .doc-evidence .doc-header a{color:#60a5fa;text-decoration:none;font-size:12px}
+        .share-btn.email{background:#333;color:#fff}
+        .share-btn.email:hover{background:#444}
+
+        .ad-slot{background:#292929;border:1px solid var(--border);padding:20px;margin:32px 0;text-align:center;font-family:'Inter',sans-serif}
+        .ad-slot-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:8px}
+        .ad-slot-size{font-size:12px;color:var(--text-muted)}
+        .ad-slot.in-article{min-height:100px;display:flex;flex-direction:column;justify-content:center}
+
+        .doc-evidence{margin:24px 0;background:#000;border:1px solid var(--border);overflow:hidden}
+        .doc-evidence .doc-header{background:var(--accent);color:#fff;padding:12px 16px;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;display:flex;justify-content:space-between;align-items:center;text-transform:uppercase;letter-spacing:1px}
+        .doc-evidence .doc-header .doc-id{color:rgba(255,255,255,0.7)}
+        .doc-evidence .doc-header a{color:#fff;text-decoration:none;font-size:11px}
         .doc-evidence .doc-header a:hover{text-decoration:underline}
-        .doc-evidence .email-content{padding:20px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;background:#fefefe}
-        .doc-evidence .email-meta{margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e5e7eb}
-        .doc-evidence .email-meta div{margin-bottom:4px}
-        .doc-evidence .email-meta strong{display:inline-block;width:60px;color:#6b7280}
-        .doc-evidence .email-body{color:#1f2937}
-        .doc-evidence .email-body .highlight{background:#fef08a;padding:2px 4px}
-        .doc-evidence .doc-footer{background:#f3f4f6;padding:10px 16px;font-family:'Inter',sans-serif;font-size:11px;color:#6b7280;border-top:1px solid #e5e7eb}
-        footer{max-width:720px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid #e5e5e5}
-        footer p{font-family:'Inter',sans-serif;color:#888;font-size:13px}
-        footer a{color:#666;text-decoration:none}
-        footer a:hover{color:#dc2626}
+        .doc-evidence .email-content{padding:20px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;background:#1a1a1a}
+        .doc-evidence .email-meta{margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+        .doc-evidence .email-meta div{margin-bottom:4px;color:var(--text-muted)}
+        .doc-evidence .email-meta strong{display:inline-block;width:60px;color:var(--text-light)}
+        .doc-evidence .email-body{color:#fff}
+        .doc-evidence .email-body .highlight{background:var(--accent);padding:2px 6px;color:#fff}
+        .doc-evidence .doc-footer{background:#252525;padding:12px 16px;font-family:'Inter',sans-serif;font-size:11px;color:var(--text-light);border-top:1px solid var(--border)}
+
+        footer{max-width:900px;margin:0 auto;padding:24px;text-align:center;border-top:1px solid var(--border);background:#000}
+        footer p{font-family:'Inter',sans-serif;color:var(--text-light);font-size:12px}
+        footer a{color:var(--text-muted)}
+        footer a:hover{color:var(--accent)}
+
         @media(max-width:600px){
-            article.article h1{font-size:24px}
-            article.article .lede{font-size:17px}
-            nav a{margin-left:12px;font-size:12px}
+            article.article h1{font-size:26px}
+            article.article .lede{font-size:16px}
+            .logo{padding:10px 16px;margin-left:-16px}
+            .logo-icon{width:40px;height:40px}
+            .logo-icon svg{width:40px;height:40px}
+            .logo-text{font-size:18px}
+            .logo-text .daily{font-size:9px}
+            nav a{margin-left:12px;font-size:11px}
             .header-inner{padding:0 16px}
-            main{padding:32px 16px}
-            .pull-quote{padding:12px 16px;font-size:17px}
-            .doc-evidence .email-content{padding:14px;font-size:12px}
-            .article-tag{padding:3px 8px;font-size:10px}
+            main{padding:24px 16px}
+            .pull-quote{padding:12px 16px;font-size:16px}
+            .doc-evidence .email-content{padding:14px;font-size:11px}
+            .article-tag{padding:3px 8px;font-size:9px}
             .share-buttons{gap:8px}
-            .share-btn{padding:8px 12px;font-size:12px}
+            .share-btn{padding:8px 12px;font-size:11px}
             .share-btn span{display:none}
             .share-btn svg{width:20px;height:20px}
         }
     </style>
 </head>
 <body>
-    <header>
+        <header>
         <div class="header-inner">
             <a href="index.html" class="logo">
                 <div class="logo-icon">
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="42" cy="42" r="32" fill="#2a2a2a" stroke="white" stroke-width="3"/>
+                        <circle cx="42" cy="42" r="32" fill="#1a1a1a" stroke="white" stroke-width="3"/>
                         <text x="42" y="48" font-size="28" font-family="Arial,sans-serif" font-weight="bold" fill="white" text-anchor="middle">EF</text>
-                        <rect x="18" y="52" width="48" height="6" fill="#dc2626"/>
+                        <rect x="18" y="52" width="48" height="6" fill="#fff"/>
                         <line x1="66" y1="66" x2="88" y2="88" stroke="white" stroke-width="6" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <span class="logo-text">EPSTEIN<span class="redact-bar"></span><span class="daily">DAILY</span></span>
+                <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
             </a>
             <nav>
                 <a href="index.html">Home</a>
                 <a href="archive.html">Archive</a>
-                <a href="about.html">About</a>
             </nav>
         </div>
     </header>
@@ -307,8 +330,8 @@
         </article>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Epstein Files Daily · <a href="index.html">Home</a> · <a href="archive.html">Archive</a> · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a></p>
+        <footer>
+        <p>&copy; 2026 Epstein Files Daily · <a href="archive.html">Archive</a> · <a href="privacy.html">Privacy</a></p>
     </footer>
 
 </body>
