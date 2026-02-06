@@ -1,0 +1,16 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <circle cx="200" cy="200" r="200" fill="#1a1a1a"/>
+
+  <!-- Magnifying glass circle (lens) -->
+  <circle cx="175" cy="175" r="130" fill="#2a2a2a" stroke="white" stroke-width="12"/>
+
+  <!-- EE Text inside magnifying glass -->
+  <text x="175" y="195" font-size="120" font-family="Arial,sans-serif" font-weight="bold" fill="white" text-anchor="middle">EE</text>
+
+  <!-- Red redaction bar inside magnifying glass -->
+  <rect x="75" y="210" width="200" height="25" fill="#dc2626"/>
+
+  <!-- Magnifying glass handle -->
+  <line x1="270" y1="270" x2="350" y2="350" stroke="white" stroke-width="24" stroke-linecap="round"/>
+</svg>
