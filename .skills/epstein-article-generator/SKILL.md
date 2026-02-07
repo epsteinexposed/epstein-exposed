@@ -114,35 +114,25 @@ grep "var(--bg)" your-article.html | head -1
 
 **⚠️ THIS STEP IS REQUIRED - DO NOT SKIP**
 
-**DEFAULT STYLE: Realistic Email Screenshot (Times New Roman)**
+**DEFAULT STYLE: Authentic Leaked Email**
 
-All thumbnails should use this clean, news-style format that looks like actual DOJ document screenshots.
+All thumbnails should look like actual leaked DOJ email screenshots with:
+- Plain white background
+- Email headers (To/From/Sent/Subject) with full email addresses
+- Yellow highlight on incriminating text
+- "Sent from my BlackBerry®" signature
+- Dark navy DOJ bar at bottom with document number
 
 **Thumbnail filename format**: `firstname-lastname-topic.png` (lowercase, hyphens)
 
 ---
 
-#### 📧 REALISTIC EMAIL THUMBNAIL (Default - Use for ALL articles)
-
-This creates a clean, realistic email screenshot using Times New Roman font with yellow highlights and a red DOJ caption bar.
+#### 📧 AUTHENTIC EMAIL THUMBNAIL (Use for ALL articles)
 
 ```python
 from PIL import Image, ImageDraw, ImageFont
-import os
 
-def get_serif_font(size, bold=False):
-    """Get Times New Roman equivalent (Liberation Serif)"""
-    if bold:
-        path = "/usr/share/fonts/truetype/liberation/LiberationSerif-Bold.ttf"
-    else:
-        path = "/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf"
-    try:
-        return ImageFont.truetype(path, size)
-    except:
-        return ImageFont.load_default()
-
-def get_sans_font(size, bold=False):
-    """Get sans-serif font for caption"""
+def get_font(size, bold=False):
     if bold:
         path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     else:
@@ -152,114 +142,100 @@ def get_sans_font(size, bold=False):
     except:
         return ImageFont.load_default()
 
-def create_realistic_email_thumbnail(
-    output_path,
-    from_name,
-    to_name,
-    date,
-    subject,
-    body_lines,
-    highlights=[],
-    doc_number="4521"
-):
-    """Create realistic email thumbnail with Times New Roman"""
+def create_authentic_email(output_path, to_email, from_email, sent_date, subject, body_lines, highlight_text=None, doc_number="DOJ-EPSTEIN-004521"):
+    """Create authentic-looking leaked email with yellow highlight and navy DOJ bar"""
 
-    width, height = 380, 280
+    width, height = 500, 300
     img = Image.new('RGB', (width, height), '#ffffff')
     draw = ImageDraw.Draw(img)
 
-    # Fonts
-    label_font = get_serif_font(11)
-    value_font = get_serif_font(11, bold=True)
-    body_font = get_serif_font(12)
-    caption_font = get_sans_font(10, bold=True)
-    caption_font_small = get_sans_font(9)
+    label_font = get_font(13, bold=True)
+    value_font = get_font(13)
+    body_font = get_font(13)
+    sig_font = get_font(12)
+    caption_font = get_font(10)
 
-    y = 18
-    left_margin = 20
-    label_width = 45
+    y = 20
+    left = 25
+    label_width = 70
 
-    # Header fields
-    fields = [
-        ("From:", from_name),
-        ("To:", to_name),
-        ("Date:", date),
-        ("Re:", subject)
-    ]
+    # To field
+    draw.text((left, y), "To:", fill='#000', font=label_font)
+    draw.text((left + label_width, y), to_email, fill='#000', font=value_font)
+    y += 24
 
-    for label, value in fields:
-        draw.text((left_margin, y), label, fill='#666666', font=label_font)
-        draw.text((left_margin + label_width, y), value, fill='#333333', font=value_font)
-        y += 18
+    # From field
+    draw.text((left, y), "From:", fill='#000', font=label_font)
+    draw.text((left + label_width, y), from_email, fill='#000', font=value_font)
+    y += 24
 
-    # Divider line
-    y += 5
-    draw.line([left_margin, y, width - left_margin, y], fill='#e0e0e0', width=1)
-    y += 12
+    # Sent field
+    draw.text((left, y), "Sent:", fill='#000', font=label_font)
+    draw.text((left + label_width, y), sent_date, fill='#000', font=value_font)
+    y += 24
 
-    # Body text with highlights
+    # Subject field
+    draw.text((left, y), "Subject:", fill='#000', font=label_font)
+    draw.text((left + label_width + 15, y), subject, fill='#000', font=value_font)
+    y += 38
+
+    # Body text with yellow highlight
     for line in body_lines:
         if line == "":
-            y += 8
+            y += 14
             continue
 
-        # Check if this line contains highlighted text
-        line_has_highlight = False
-        for hl in highlights:
-            if hl.lower() in line.lower():
-                line_has_highlight = True
-                idx = line.lower().find(hl.lower())
-                before = line[:idx]
-                highlight_text = line[idx:idx+len(hl)]
-                after = line[idx+len(hl):]
+        if highlight_text and highlight_text.lower() in line.lower():
+            idx = line.lower().find(highlight_text.lower())
+            before = line[:idx]
+            word = line[idx:idx+len(highlight_text)]
+            after = line[idx+len(highlight_text):]
 
-                x = left_margin
-                if before:
-                    draw.text((x, y), before, fill='#333333', font=body_font)
-                    x += draw.textlength(before, font=body_font)
+            x = left
+            if before:
+                draw.text((x, y), before, fill='#000', font=body_font)
+                x += draw.textlength(before, font=body_font)
 
-                # Draw highlight background
-                hl_width = draw.textlength(highlight_text, font=body_font)
-                draw.rectangle([x-2, y-1, x + hl_width + 2, y + 15], fill='#fff59d')
-                draw.text((x, y), highlight_text, fill='#333333', font=body_font)
-                x += hl_width
+            # Yellow highlight background
+            word_w = draw.textlength(word, font=body_font)
+            draw.rectangle([x - 2, y - 2, x + word_w + 2, y + 18], fill='#ffff00')
+            draw.text((x, y), word, fill='#000', font=body_font)
 
-                if after:
-                    draw.text((x, y), after, fill='#333333', font=body_font)
-                break
+            x += word_w
+            if after:
+                draw.text((x, y), after, fill='#000', font=body_font)
+        else:
+            draw.text((left, y), line, fill='#000', font=body_font)
 
-        if not line_has_highlight:
-            draw.text((left_margin, y), line, fill='#333333', font=body_font)
+        y += 22
 
-        y += 18
+    # BlackBerry signature
+    y += 12
+    draw.text((left, y), "Sent from my BlackBerry® wireless device", fill='#000', font=sig_font)
 
-    # Red caption bar at bottom
-    caption_height = 32
-    draw.rectangle([0, height - caption_height, width, height], fill='#dc2626')
-    draw.text((left_margin, height - caption_height + 9), "DOJ Document Release", fill='#ffffff', font=caption_font)
-    draw.text((width - 60, height - caption_height + 10), f"#{doc_number}", fill='#ffcccc', font=caption_font_small)
+    # Dark navy bar at bottom with DOJ document number
+    bar_height = 28
+    draw.rectangle([0, height - bar_height, width, height], fill='#1a2744')
+    draw.text((15, height - bar_height + 8), f"U.S. Department of Justice  •  {doc_number}", fill='#ffffff', font=caption_font)
 
-    os.makedirs(os.path.dirname(output_path) if os.path.dirname(output_path) else "images", exist_ok=True)
     img.save(output_path, quality=95)
     print(f"Created: {output_path}")
 
 # Usage:
-create_realistic_email_thumbnail(
+create_authentic_email(
     "images/person-topic.png",
-    from_name="Jeffrey Epstein",
-    to_name="Person Name",
-    date="March 15, 2005",
-    subject="Meeting Request",
+    to_email="Jeffrey Epstein[jeevacation@gmail.com]",
+    from_email="Person Name[person@email.com]",
+    sent_date="Thur 3/15/2005 2:30:15 PM",
+    subject="Re: Meeting Request",
     body_lines=[
-        "Dear Person,",
-        "",
         "Looking forward to our meeting",
         "at the island next week.",
         "",
         "Keep this between us."
     ],
-    highlights=["the island", "between us"],
-    doc_number="4521"
+    highlight_text="between us",
+    doc_number="DOJ-EPSTEIN-004521"
 )
 ```
 
@@ -361,7 +337,7 @@ git push
 1. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
 2. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding
 3. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news
-4. **Thumbnails**: MANDATORY - Use the realistic email screenshot style (Times New Roman, yellow highlights, red DOJ caption bar)
+4. **Thumbnails**: MANDATORY - Use the authentic leaked email style (yellow highlights, BlackBerry signature, dark navy DOJ bar)
 5. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
 6. **Article cards**: MUST include `<img>` thumbnail tag
 7. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
