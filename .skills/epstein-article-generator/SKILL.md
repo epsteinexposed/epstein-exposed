@@ -96,38 +96,38 @@ def create_thumbnail(filename, doc_id, to_field, from_field, date_field, highlig
     img = Image.new('RGB', (WIDTH, HEIGHT), (250, 250, 247))
     draw = ImageDraw.Draw(img)
 
-    # Load fonts
+    # Load fonts - LARGE sizes for readability
     try:
-        font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 22)
-        font_label = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 26)
-        font_value = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 26)
-        font_highlight = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 32)
+        font_header = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
+        font_label = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 32)
+        font_value = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 32)
+        font_highlight = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 38)
     except:
         font_header = font_label = font_value = font_highlight = ImageFont.load_default()
 
     # Dark slate header bar
-    draw.rectangle([(0, 0), (WIDTH, 45)], fill=(51, 65, 85))
-    draw.text((18, 10), f"📁 DOJ EPSTEIN FILES — {doc_id}", font=font_header, fill=(255, 255, 255))
+    draw.rectangle([(0, 0), (WIDTH, 50)], fill=(51, 65, 85))
+    draw.text((20, 12), f"📁 DOJ EPSTEIN FILES — {doc_id}", font=font_header, fill=(255, 255, 255))
 
     # Red accent bar on left (below header)
-    draw.rectangle([(0, 45), (18, HEIGHT)], fill=(220, 38, 38))
+    draw.rectangle([(0, 50), (18, HEIGHT)], fill=(220, 38, 38))
 
-    # Email metadata
-    y = 80
+    # Email metadata - larger spacing
+    y = 95
     label_color = (120, 120, 120)
     value_color = (40, 40, 40)
 
     draw.text((55, y), "To:", font=font_label, fill=label_color)
-    draw.text((145, y), to_field, font=font_value, fill=value_color)
-    y += 40
+    draw.text((160, y), to_field, font=font_value, fill=value_color)
+    y += 50
 
     draw.text((55, y), "From:", font=font_label, fill=label_color)
-    draw.text((145, y), from_field, font=font_value, fill=value_color)
-    y += 40
+    draw.text((160, y), from_field, font=font_value, fill=value_color)
+    y += 50
 
     draw.text((55, y), "Date:", font=font_label, fill=label_color)
-    draw.text((145, y), date_field, font=font_value, fill=value_color)
-    y += 60
+    draw.text((160, y), date_field, font=font_value, fill=value_color)
+    y += 70
 
     # Word wrap the highlight text
     max_width = WIDTH - 120
@@ -151,9 +151,9 @@ def create_thumbnail(filename, doc_id, to_field, from_field, date_field, highlig
         line_bbox = draw.textbbox((0, 0), line, font=font_highlight)
         line_width = line_bbox[2] - line_bbox[0]
         line_height = line_bbox[3] - line_bbox[1]
-        draw.rectangle([(50, y - 3), (58 + line_width, y + line_height + 8)], fill=(255, 247, 140))
-        draw.text((54, y), line, font=font_highlight, fill=(40, 40, 40))
-        y += line_height + 18
+        draw.rectangle([(50, y - 5), (60 + line_width, y + line_height + 10)], fill=(255, 247, 140))
+        draw.text((55, y), line, font=font_highlight, fill=(40, 40, 40))
+        y += line_height + 22
 
     # Save to images folder
     os.makedirs("images", exist_ok=True)
