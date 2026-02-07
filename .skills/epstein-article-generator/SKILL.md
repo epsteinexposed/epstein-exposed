@@ -14,14 +14,33 @@ Generate investigative journalism articles for epsteinfilesdaily.com based on DO
 
 Before pushing ANY article, confirm ALL of these are complete:
 
+- [ ] **Article created FROM TEMPLATE** - MUST copy `references/article-template.html` as base
+- [ ] **Article has theme-toggle** - Verify with: `grep -c "theme-toggle" article.html` (should return 6)
 - [ ] **Thumbnail image created** in `images/` folder
-- [ ] **Article HTML file** saved with correct styling (dark theme)
 - [ ] **index.html updated** with article card INCLUDING thumbnail `<img>` tag
 - [ ] **feed.xml updated** with new `<item>`
 - [ ] **covered-topics.md updated** with new topic
 - [ ] **Tags use FULL NAMES** (e.g., "woody allen" not "allen")
 
 **DO NOT SKIP THE THUMBNAIL** - Articles without thumbnails look broken on the site.
+
+## 🚨 MANDATORY: USE THE TEMPLATE FILE
+
+**NEVER write article HTML from scratch.** ALWAYS:
+1. Read `references/article-template.html` first
+2. Copy it as the base for your new article
+3. Only replace the placeholder content ({{HEADLINE}}, {{SLUG}}, etc.)
+
+The template includes critical features that MUST be present:
+- Dark theme CSS with CSS variables
+- Light/dark mode toggle in header
+- Search bar in header
+- Sticky header with red accent
+- Theme persistence JavaScript
+- Correct "Epstein Files Daily" branding
+- EF favicon (not EE)
+
+**If your article is missing any of these, it will look broken on the site.**
 
 ---
 
@@ -53,15 +72,36 @@ Search DOJ Epstein files (https://www.justice.gov/epstein) for interesting stori
 - Quote directly from documents
 - All source-box links must point to justice.gov/epstein domains
 
-### Step 4: Write Article
+### Step 4: Write Article (MUST USE TEMPLATE)
 
-Use template from `references/article-template.html`. The template includes:
-- Dark theme styling (#1f1f1f background)
-- Light/dark mode toggle
-- Header with search bar
-- Proper "Epstein Files Daily" branding
+**⚠️ CRITICAL: You MUST use the template file. DO NOT write HTML from scratch.**
 
-**Elements:**
+**Step 4a: Read the template first**
+```bash
+cat references/article-template.html
+```
+
+**Step 4b: Copy template and replace placeholders**
+
+The template uses these placeholders - replace ALL of them:
+- `{{HEADLINE}}` - Article headline
+- `{{META_DESCRIPTION}}` - SEO description (150-160 chars)
+- `{{SLUG}}` - URL slug (e.g., `martha-stewart-epstein-parties`)
+- `{{THUMBNAIL_FILENAME}}` - Thumbnail filename without extension
+- `{{PERSON_TAG}}` - Person's full name for tag
+- `{{DATE}}` - Publication date
+- `{{ARTICLE_CONTENT}}` - The actual article body
+
+**Step 4c: Verify article has required features**
+```bash
+# Must return 6 (theme toggle elements)
+grep -c "theme-toggle" your-article.html
+
+# Must return matches (dark theme CSS)
+grep "var(--bg)" your-article.html | head -1
+```
+
+**Article Elements:**
 - **Headline**: Attention-grabbing, uses quotes from docs when possible
 - **Lede**: 1-2 sentence hook summarizing the revelation
 - **Body**: Opening context, document evidence box, analysis, response box, source box, share buttons
@@ -229,10 +269,29 @@ Add the new topic to prevent duplicates.
 
 ### Step 8: Verify and Publish
 
-**Before committing, verify:**
-1. Thumbnail exists: `ls images/firstname-lastname-topic.png`
-2. Article exists: `ls firstname-lastname-topic.html`
-3. index.html has the article card with `<img>` tag
+**Before committing, run ALL these verification checks:**
+
+```bash
+# 1. Thumbnail exists
+ls images/firstname-lastname-topic.png
+
+# 2. Article exists
+ls firstname-lastname-topic.html
+
+# 3. Article has theme toggle (MUST return 6)
+grep -c "theme-toggle" firstname-lastname-topic.html
+
+# 4. Article has dark theme CSS
+grep -c "var(--bg)" firstname-lastname-topic.html
+
+# 5. Article has correct branding (should show "Epstein Files Daily")
+grep "Epstein Files Daily" firstname-lastname-topic.html | head -1
+
+# 6. index.html has the article card with <img> tag
+grep "firstname-lastname-topic.png" index.html
+```
+
+**If any check fails, DO NOT commit. Fix the issue first.**
 
 **Commit with ALL files:**
 ```bash
@@ -251,9 +310,20 @@ git push
 
 ## Summary of Key Rules
 
-1. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news
-2. **Thumbnails**: MANDATORY for every article - cream background, DOJ document style, red accent bar
-3. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
-4. **Article cards**: MUST include `<img>` thumbnail tag
-5. **Template**: Use dark theme template from `references/article-template.html`
-6. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
+1. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
+2. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding
+3. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news
+4. **Thumbnails**: MANDATORY for every article - cream background, DOJ document style, red accent bar
+5. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
+6. **Article cards**: MUST include `<img>` thumbnail tag
+7. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
+
+## Quick Verification Commands
+
+```bash
+# Run these BEFORE every commit:
+grep -c "theme-toggle" article.html        # Must return 6
+grep -c "var(--bg)" article.html           # Must return >0
+grep "Epstein Files Daily" article.html    # Must show matches
+ls images/thumbnail.png                     # Must exist
+```
