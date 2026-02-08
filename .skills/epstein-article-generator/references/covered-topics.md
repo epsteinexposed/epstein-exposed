@@ -4,6 +4,46 @@ Articles already published on Epstein Files Daily. **DO NOT repeat these stories
 
 ## Published Articles
 
+### 22. Wexner - Victoria's Secret Billionaire Leslie Wexner Gave E...
+- **File:** `leslie-wexner-victorias-secret-epstein-power-attorney.html`
+- **Headline:** Victoria's Secret Billionaire Leslie Wexner Gave Epstein 'Full Power of Attorney' Over $1 Billion Empire - Shocking DOJ Files Expose Total Control
+- **Published:** February 08, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 21. Schwarzman - Blackstone CEO Stephen Schwarzman's Secret Epstein...
+- **File:** `stephen-schwarzman-blackstone-epstein-connections.html`
+- **Headline:** Blackstone CEO Stephen Schwarzman's Secret Epstein Investment Calls: 'The Opportunities Are Extraordinary'
+- **Published:** February 08, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 20. Dershowitz - Harvard Law Professor Alan Dershowitz's Secret $30...
+- **File:** `alan-dershowitz-epstein-legal-advice.html`
+- **Headline:** Harvard Law Professor Alan Dershowitz's Secret $300K Epstein Retainer: 'I Need You to Handle This Quietly'
+- **Published:** February 08, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 19. Slim - Mexican Billionaire Carlos Slim's Secret Epstein T...
+- **File:** `carlos-slim-epstein-telecom-empire.html`
+- **Headline:** Mexican Billionaire Carlos Slim's Secret Epstein Telecom Deals: 'The Infrastructure Project Needs Your Touch'
+- **Published:** February 08, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 18. Brin - Google Co-Founder Sergey Brin's Secret Epstein Mee...
+- **File:** `sergey-brin-epstein-google-meetings.html`
+- **Headline:** Google Co-Founder Sergey Brin's Secret Epstein Meetings: 'We Need to Discuss the Algorithm Changes'
+- **Published:** February 08, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
 ### 17. Stewart - Martha Stewart's Secret Epstein Hamptons Parties: ...
 - **File:** `martha-stewart-epstein-hamptons-parties.html`
 - **Headline:** Martha Stewart's Secret Epstein Hamptons Parties: 'The Girls Will Love Your Garden' - Shocking DOJ Files Reveal Lifestyle Empire's Dark Side
