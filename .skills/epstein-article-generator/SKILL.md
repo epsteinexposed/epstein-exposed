@@ -693,7 +693,7 @@ Use this exact format:
                 <span class="reading-time">· X min read</span>
             </div>
             <h2><a href="firstname-lastname-topic.html">[Headline]</a></h2>
-            <p class="lede">[First sentence from the article - NOT a generic summary]</p>
+            <p class="lede">[Copy the article's <p class="lede"> subtitle/tagline exactly]</p>
             <a href="firstname-lastname-topic.html" class="read-more">Read full article</a>
         </div>
     </div>
@@ -770,7 +770,7 @@ git push
    All styles have: yellow highlights, dark navy DOJ bar at bottom
 5. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
 6. **Article cards**: MUST include `<img>` thumbnail tag, `.lede` and `.read-more` MUST be INSIDE `article-title-section` (not outside)
-7. **Lede text**: MUST use the article's actual first sentence, NOT a generic summary like "DOJ files reveal..."
+7. **Lede text**: MUST match the article's `<p class="lede">` subtitle/tagline exactly - the compelling hook after the headline, NOT a generic summary
 8. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
 
 ## Quick Verification Commands
