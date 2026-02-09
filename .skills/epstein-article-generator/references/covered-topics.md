@@ -4,6 +4,46 @@ Articles already published on Epstein Files Daily. **DO NOT repeat these stories
 
 ## Published Articles
 
+### 27. Barr - Attorney General William Barr Refused to Recuse Hi...
+- **File:** `william-barr-epstein-recusal-justice-department.html`
+- **Headline:** Attorney General William Barr Refused to Recuse Himself from Epstein Case Despite Family Ties - Secret DOJ Memos Expose Cover-Up
+- **Published:** February 09, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 26. Barrack - Trump's Billionaire Friend Tom Barrack Used Epstei...
+- **File:** `tom-barrack-epstein-trump-fundraising.html`
+- **Headline:** Trump's Billionaire Friend Tom Barrack Used Epstein Connections for Secret UAE Fundraising - 'He Opens Every Door'
+- **Published:** February 09, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 25. Campbell - Supermodel Naomi Campbell Used Her Children's Char...
+- **File:** `naomi-campbell-epstein-charity-modeling.html`
+- **Headline:** Supermodel Naomi Campbell Used Her Children's Charity to Fund Epstein's Private Events - DOJ Files Expose Fashion World's Dark Secret
+- **Published:** February 09, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 24. Winfrey - Media Queen Oprah Winfrey's Secret Epstein Strateg...
+- **File:** `oprah-winfrey-epstein-media-empire-meetings.html`
+- **Headline:** Media Queen Oprah Winfrey's Secret Epstein Strategy Sessions: 'We Need to Control the Women's Stories'
+- **Published:** February 09, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
+### 23. Stephanopoulos - ABC's George Stephanopoulos Secretly Coordinated E...
+- **File:** `george-stephanopoulos-epstein-abc-interviews.html`
+- **Headline:** ABC's George Stephanopoulos Secretly Coordinated Epstein TV Interviews: 'We Can Control the Narrative'
+- **Published:** February 09, 2026
+- **Key Details:** Auto-generated article
+- **Documents:** See article for sources
+
+
 ### 22. Wexner - Victoria's Secret Billionaire Leslie Wexner Gave E...
 - **File:** `leslie-wexner-victorias-secret-epstein-power-attorney.html`
 - **Headline:** Victoria's Secret Billionaire Leslie Wexner Gave Epstein 'Full Power of Attorney' Over $1 Billion Empire - Shocking DOJ Files Expose Total Control
