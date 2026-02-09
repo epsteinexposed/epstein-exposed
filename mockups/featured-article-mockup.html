@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Featured First Article - Mockup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1f1f1f;--bg-card:#252525;--text:#fff;--text-muted:#b0b0b0;--border:#333;--accent:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding:20px}
+
+        h1{font-family:'Oswald',sans-serif;font-size:24px;color:var(--accent);text-transform:uppercase;margin-bottom:20px;text-align:center}
+
+        .articles{max-width:900px;margin:0 auto}
+
+        /* REGULAR ARTICLE */
+        .article{padding:20px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
+        .article img{width:100%;border:2px solid var(--border)}
+        .article-tag{background:var(--accent);color:#fff;padding:4px 10px;font-size:10px;font-weight:700;text-transform:uppercase;display:inline-block;margin-bottom:8px}
+        .article h2{font-family:'Oswald',sans-serif;font-size:22px;text-transform:uppercase;margin-bottom:8px;line-height:1.2}
+        .article p{color:var(--text-muted);font-size:14px}
+        .article-meta{font-size:11px;color:#666;margin-bottom:8px}
+
+        /* FEATURED FIRST ARTICLE - Just a bit more prominent */
+        .article.featured{
+            background:linear-gradient(135deg, #252525 0%, #1f1f1f 100%);
+            border:1px solid var(--border);
+            border-left:4px solid var(--accent);
+            padding:24px;
+            margin-bottom:8px;
+        }
+        .article.featured img{
+            border-color:var(--accent);
+        }
+        .article.featured h2{
+            font-size:26px;
+        }
+        .article.featured .featured-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:6px;
+            background:var(--accent);
+            color:#fff;
+            padding:6px 12px;
+            font-size:10px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            margin-bottom:12px;
+        }
+
+        .note{background:#333;padding:16px;margin:30px auto;max-width:900px;border-left:4px solid var(--accent);font-size:14px;color:var(--text-muted)}
+        .note strong{color:var(--accent)}
+    </style>
+</head>
+<body>
+    <h1>Featured First Article - Subtle Highlight</h1>
+
+    <div class="articles">
+        <!-- FEATURED FIRST ARTICLE -->
+        <article class="article featured">
+            <img src="../images/martha-stewart-parties.png" alt="Martha Stewart">
+            <div>
+                <span class="featured-badge">📌 Latest</span>
+                <div class="article-meta">February 7, 2026 · 5 min read</div>
+                <span class="article-tag">Martha Stewart</span>
+                <h2>Martha Stewart's Secret Epstein Hamptons Parties: 'The Girls Will Love Your Garden'</h2>
+                <p>DOJ files expose Martha Stewart's secret coordination with Jeffrey Epstein for exclusive Hamptons parties.</p>
+            </div>
+        </article>
+
+        <!-- REGULAR ARTICLES -->
+        <article class="article">
+            <img src="../images/kevin-spacey-screenings.png" alt="Kevin Spacey">
+            <div>
+                <div class="article-meta">February 7, 2026 · 5 min read</div>
+                <span class="article-tag">Kevin Spacey</span>
+                <h2>Kevin Spacey Hosted Secret Film Screenings at Epstein's Mansion</h2>
+                <p>DOJ files reveal Kevin Spacey organized private movie screenings at Jeffrey Epstein's NYC mansion.</p>
+            </div>
+        </article>
+
+        <article class="article">
+            <img src="../images/rupert-murdoch-media.png" alt="Rupert Murdoch">
+            <div>
+                <div class="article-meta">February 7, 2026 · 5 min read</div>
+                <span class="article-tag">Rupert Murdoch</span>
+                <h2>Rupert Murdoch's Secret Epstein Strategy Calls Revealed</h2>
+                <p>DOJ files reveal Rupert Murdoch held private calls with Jeffrey Epstein about media coverage strategies.</p>
+            </div>
+        </article>
+    </div>
+
+    <div class="note">
+        <strong>Changes from regular articles:</strong> Red left border, subtle background gradient, "Latest" badge, slightly larger headline (26px vs 22px), red border on thumbnail. Keeps the same layout - just makes it pop a bit more.
+    </div>
+</body>
+</html>

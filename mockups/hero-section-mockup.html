@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Section Mockup - Epstein Files Daily</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1f1f1f;--bg-card:#252525;--text:#fff;--text-muted:#b0b0b0;--border:#333;--accent:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+
+        /* HEADER */
+        header{background:#000;border-bottom:4px solid var(--accent);padding:0}
+        .header-inner{max-width:1400px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+        .logo{display:flex;align-items:center;gap:0;text-decoration:none;background:var(--accent);padding:12px 24px;margin-left:-24px}
+        .logo-text{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px}
+        .logo-text .daily{display:block;font-size:11px;letter-spacing:3px;opacity:0.9}
+
+        /* HERO SECTION */
+        .hero{background:linear-gradient(135deg, #1a1a1a 0%, #2a1a1a 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+        .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" font-size="80" text-anchor="middle" fill="rgba(220,38,38,0.03)">⚠</text></svg>');background-size:200px;opacity:0.5}
+        .hero-inner{max-width:1400px;margin:0 auto;padding:40px 24px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;position:relative;z-index:1}
+
+        .hero-content{padding-right:20px}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:8px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+        .hero-badge svg{width:16px;height:16px}
+
+        .hero h1{font-family:'Oswald',sans-serif;font-size:48px;font-weight:700;line-height:1.1;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
+        .hero h1 span{color:var(--accent)}
+
+        .hero-lede{font-size:20px;color:var(--text-muted);margin-bottom:24px;line-height:1.5}
+
+        .hero-meta{display:flex;align-items:center;gap:16px;margin-bottom:24px;font-size:13px;color:var(--text-muted)}
+        .hero-tag{background:#333;color:#fff;padding:6px 14px;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px}
+        .hero-tag:hover{background:var(--accent)}
+
+        .hero-cta{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;padding:14px 28px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px;text-decoration:none;transition:all 0.2s}
+        .hero-cta:hover{background:#b91c1c;transform:translateY(-2px)}
+        .hero-cta svg{width:20px;height:20px}
+
+        /* HERO THUMBNAIL */
+        .hero-thumbnail{position:relative}
+        .hero-thumbnail img{width:100%;height:auto;border:3px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,0.5);transition:transform 0.3s,border-color 0.3s}
+        .hero-thumbnail:hover img{transform:scale(1.02);border-color:var(--accent)}
+        .hero-thumbnail::after{content:'EXCLUSIVE';position:absolute;top:20px;right:-10px;background:var(--accent);color:#fff;padding:8px 20px;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;box-shadow:4px 4px 0 rgba(0,0,0,0.3)}
+
+        /* STATS BAR */
+        .stats-bar{background:#000;padding:16px 24px;border-bottom:1px solid var(--border)}
+        .stats-inner{max-width:1400px;margin:0 auto;display:flex;justify-content:center;gap:60px}
+        .stat{text-align:center}
+        .stat-value{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;color:var(--accent)}
+        .stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+
+        /* RECENT ARTICLES PREVIEW */
+        .recent-section{max-width:1400px;margin:0 auto;padding:40px 24px}
+        .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+        .section-title{font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:12px}
+        .section-title::before{content:'';width:4px;height:24px;background:var(--accent)}
+
+        .articles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+        .article-card{background:var(--bg-card);border:1px solid var(--border);overflow:hidden;transition:all 0.2s}
+        .article-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+        .article-card img{width:100%;height:180px;object-fit:cover;border-bottom:1px solid var(--border)}
+        .article-card-content{padding:16px}
+        .article-card-tag{background:var(--accent);color:#fff;padding:4px 10px;font-size:10px;font-weight:700;text-transform:uppercase;display:inline-block;margin-bottom:10px}
+        .article-card h3{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;text-transform:uppercase;line-height:1.2;margin-bottom:8px}
+        .article-card p{font-size:13px;color:var(--text-muted);line-height:1.5}
+
+        /* NOTE */
+        .mockup-note{background:#333;padding:20px;margin:40px 24px;max-width:1400px;margin-left:auto;margin-right:auto;border-left:4px solid var(--accent)}
+        .mockup-note h4{color:var(--accent);margin-bottom:8px;font-size:14px;text-transform:uppercase;letter-spacing:1px}
+        .mockup-note p{color:var(--text-muted);font-size:14px;line-height:1.6}
+
+        @media(max-width:900px){
+            .hero-inner{grid-template-columns:1fr}
+            .hero h1{font-size:32px}
+            .articles-grid{grid-template-columns:1fr}
+            .stats-inner{flex-wrap:wrap;gap:30px}
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-inner">
+            <a href="#" class="logo">
+                <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    BREAKING: NEW DOJ RELEASE
+                </div>
+                <h1>Martha Stewart's <span>Secret Epstein</span> Hamptons Parties</h1>
+                <p class="hero-lede">DOJ files expose Martha Stewart's secret coordination with Jeffrey Epstein for exclusive Hamptons parties featuring young women and powerful guests. "The girls will love your garden."</p>
+                <div class="hero-meta">
+                    <a href="#" class="hero-tag">Martha Stewart</a>
+                    <span>February 7, 2026</span>
+                    <span>·</span>
+                    <span>5 min read</span>
+                </div>
+                <a href="#" class="hero-cta">
+                    Read Full Investigation
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+            <div class="hero-thumbnail">
+                <img src="../images/martha-stewart-parties.png" alt="DOJ Document">
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stats-inner">
+            <div class="stat">
+                <div class="stat-value">3.5M+</div>
+                <div class="stat-label">Pages Released</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">847</div>
+                <div class="stat-label">Names Identified</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">16</div>
+                <div class="stat-label">Articles Published</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">24/7</div>
+                <div class="stat-label">Document Analysis</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECENT ARTICLES -->
+    <section class="recent-section">
+        <div class="section-header">
+            <h2 class="section-title">Latest Investigations</h2>
+        </div>
+        <div class="articles-grid">
+            <article class="article-card">
+                <img src="../images/kevin-spacey-screenings.png" alt="Kevin Spacey">
+                <div class="article-card-content">
+                    <span class="article-card-tag">Kevin Spacey</span>
+                    <h3>Kevin Spacey Hosted Secret Film Screenings at Epstein's Mansion</h3>
+                    <p>DOJ files reveal Kevin Spacey organized private movie screenings at Jeffrey Epstein's NYC mansion.</p>
+                </div>
+            </article>
+            <article class="article-card">
+                <img src="../images/rupert-murdoch-media.png" alt="Rupert Murdoch">
+                <div class="article-card-content">
+                    <span class="article-card-tag">Rupert Murdoch</span>
+                    <h3>Rupert Murdoch's Secret Epstein Strategy Calls Revealed</h3>
+                    <p>DOJ files reveal Rupert Murdoch held private calls with Jeffrey Epstein about media coverage strategies.</p>
+                </div>
+            </article>
+            <article class="article-card">
+                <img src="../images/david-blaine-magic.png" alt="David Blaine">
+                <div class="article-card-content">
+                    <span class="article-card-tag">David Blaine</span>
+                    <h3>David Blaine Performed Private Shows for Epstein's VIP Guests</h3>
+                    <p>DOJ files reveal David Blaine performed exclusive magic shows for Epstein's inner circle.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- MOCKUP NOTE -->
+    <div class="mockup-note">
+        <h4>🎨 Hero Section Features</h4>
+        <p>
+            <strong>What's included:</strong> Large headline with accent color, featured thumbnail with "EXCLUSIVE" badge,
+            breaking news indicator, call-to-action button, stats bar showing site credibility metrics,
+            and a 3-column grid for recent articles below. The hero creates immediate visual impact and
+            highlights the most important story of the day.
+        </p>
+    </div>
+</body>
+</html>

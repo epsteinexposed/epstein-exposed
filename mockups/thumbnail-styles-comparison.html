@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thumbnail Style Mockups</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1f1f1f;--accent:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:#fff;padding:40px;line-height:1.6}
+
+        h1{font-family:'Oswald',sans-serif;font-size:36px;color:var(--accent);text-transform:uppercase;margin-bottom:10px;text-align:center}
+        .subtitle{text-align:center;color:#888;margin-bottom:40px}
+
+        .grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1400px;margin:0 auto}
+
+        .card{background:#252525;border-radius:8px;overflow:hidden;border:2px solid #333}
+        .card h2{font-family:'Oswald',sans-serif;font-size:20px;color:var(--accent);padding:16px 20px;background:#1a1a1a;text-transform:uppercase;letter-spacing:1px}
+        .card .thumbnail{padding:20px;background:#1a1a1a}
+        .card img{width:100%;height:auto;border:1px solid #444}
+        .card .description{padding:16px 20px;font-size:14px;color:#aaa}
+        .card .best-for{padding:0 20px 16px;font-size:13px}
+        .card .best-for strong{color:var(--accent)}
+
+        .current{border:2px solid #444}
+        .current h2::after{content:" (CURRENT)";font-size:12px;color:#666}
+
+        @media(max-width:900px){
+            .grid{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Thumbnail Style Options</h1>
+    <p class="subtitle">Different document types to add variety to the homepage</p>
+
+    <div class="grid">
+        <!-- Current Email Style -->
+        <div class="card current">
+            <h2>📧 Email Style</h2>
+            <div class="thumbnail">
+                <img src="../images/martha-stewart-parties.png" alt="Current email style">
+            </div>
+            <p class="description">The current style - recreated DOJ email documents with To/From/Date fields and highlighted quote.</p>
+            <p class="best-for"><strong>Best for:</strong> Email correspondence, memos, personal communications</p>
+        </div>
+
+        <!-- Flight Log Style -->
+        <div class="card">
+            <h2>✈️ Flight Log Style</h2>
+            <div class="thumbnail">
+                <img src="style-flight-log.png" alt="Flight log style">
+            </div>
+            <p class="description">Passenger manifest format with table layout, perfect for Lolita Express flight records. Navy header with "CLASSIFIED" stamp.</p>
+            <p class="best-for"><strong>Best for:</strong> Flight records, travel logs, passenger lists, transportation documents</p>
+        </div>
+
+        <!-- Wire Transfer Style -->
+        <div class="card">
+            <h2>💰 Wire Transfer Style</h2>
+            <div class="thumbnail">
+                <img src="style-wire-transfer.png" alt="Wire transfer style">
+            </div>
+            <p class="description">Bank document format showing financial transactions. Green header with gold accent, highlighted amounts, "SUBPOENAED" stamp.</p>
+            <p class="best-for"><strong>Best for:</strong> Financial records, payments, wire transfers, donations, money trails</p>
+        </div>
+
+        <!-- Calendar Style -->
+        <div class="card">
+            <h2>📅 Calendar Style</h2>
+            <div class="thumbnail">
+                <img src="style-calendar.png" alt="Calendar style">
+            </div>
+            <p class="description">Personal calendar/appointment book format with day view and scheduled meetings. Purple theme with notes section.</p>
+            <p class="best-for"><strong>Best for:</strong> Meetings, appointments, dinner parties, scheduled events, social calendars</p>
+        </div>
+
+        <!-- Text Message Style -->
+        <div class="card">
+            <h2>💬 Text Message Style</h2>
+            <div class="thumbnail">
+                <img src="style-text-message.png" alt="Text message style">
+            </div>
+            <p class="description">Phone text conversation format with message bubbles. Dark theme mimicking phone screen, highlighted key messages.</p>
+            <p class="best-for"><strong>Best for:</strong> Text messages, chat logs, informal communications, quick exchanges</p>
+        </div>
+    </div>
+</body>
+</html>

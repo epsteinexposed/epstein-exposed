@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News-Style Email Thumbnails - Mockups</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1a1a1a;--accent:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:#fff;padding:40px;line-height:1.6}
+
+        h1{font-family:'Oswald',sans-serif;font-size:32px;color:var(--accent);text-transform:uppercase;margin-bottom:10px;text-align:center;letter-spacing:2px}
+        .subtitle{text-align:center;color:#888;margin-bottom:50px;font-size:14px}
+
+        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;max-width:1200px;margin:0 auto}
+
+        .option{background:#252525;border-radius:12px;overflow:hidden;border:2px solid #333;transition:border-color 0.3s}
+        .option:hover{border-color:var(--accent)}
+        .option-header{background:#1a1a1a;padding:16px 20px;border-bottom:1px solid #333}
+        .option-header h2{font-size:16px;color:var(--accent);margin-bottom:4px}
+        .option-header p{font-size:12px;color:#666}
+
+        .thumbnail-preview{padding:20px;background:#0d0d0d;min-height:280px;display:flex;align-items:center;justify-content:center}
+
+        .option-desc{padding:16px 20px;font-size:13px;color:#999;background:#252525}
+
+        /* Style 1: Gmail Screenshot */
+        .gmail-thumb{width:320px;background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
+        .gmail-header{background:#f6f8fc;padding:12px 16px;border-bottom:1px solid #e0e0e0;display:flex;align-items:center;gap:12px}
+        .gmail-avatar{width:40px;height:40px;background:#4285f4;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:16px}
+        .gmail-meta{flex:1}
+        .gmail-from{font-size:13px;font-weight:600;color:#202124}
+        .gmail-to{font-size:11px;color:#5f6368}
+        .gmail-date{font-size:11px;color:#5f6368}
+        .gmail-body{padding:16px;font-size:12px;color:#202124;line-height:1.6}
+        .gmail-body .highlight{background:#fff59d;padding:1px 3px}
+        .gmail-caption{background:#1a1a1a;color:#999;padding:10px 16px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}
+
+        /* Style 2: DOJ Redacted */
+        .doj-thumb{width:320px;background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
+        .doj-header{background:#1a237e;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px}
+        .doj-seal{width:30px;height:30px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#1a237e;font-weight:700}
+        .doj-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+        .doj-body{padding:16px;font-size:11px;color:#333;line-height:1.8;font-family:'Courier New',monospace}
+        .doj-body .redacted{background:#000;color:#000;padding:0 3px;user-select:none}
+        .doj-body .field{color:#666;font-size:10px}
+        .doj-id{padding:8px 16px;background:#f5f5f5;font-size:9px;color:#666;font-family:monospace;border-top:1px solid #ddd}
+        .doj-caption{background:#1a1a1a;color:#999;padding:10px 16px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}
+
+        /* Style 3: Simple Clean */
+        .simple-thumb{width:320px;background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
+        .simple-header{padding:14px 16px;border-bottom:1px solid #e5e5e5}
+        .simple-row{display:flex;margin-bottom:6px;font-size:11px}
+        .simple-label{color:#666;width:50px;flex-shrink:0}
+        .simple-value{color:#333;font-weight:500}
+        .simple-body{padding:16px;font-size:12px;color:#333;line-height:1.7}
+        .simple-body .highlight{background:#fff59d;padding:1px 3px}
+        .simple-caption{background:#dc2626;color:#fff;padding:10px 16px;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;display:flex;justify-content:space-between;align-items:center}
+        .simple-caption span{opacity:0.8}
+
+        .ref-box{background:#252525;padding:24px;margin-bottom:40px;border-left:4px solid var(--accent);border-radius:4px;max-width:800px;margin-left:auto;margin-right:auto}
+        .ref-box h3{color:var(--accent);font-size:13px;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+        .ref-box p{font-size:13px;color:#888;line-height:1.7}
+    </style>
+</head>
+<body>
+    <h1>📰 News-Style Thumbnails</h1>
+    <p class="subtitle">Based on how real news outlets (NHPR) display Epstein documents</p>
+
+    <div class="ref-box">
+        <h3>Reference: NHPR Style</h3>
+        <p>Real news sites use simple, clean document screenshots with captions explaining the source: "Screenshot of an email exchange between Jeffrey Epstein and Dean Kamen, released by the United States Department of Justice."</p>
+    </div>
+
+    <div class="grid">
+        <!-- Option A: Gmail Style -->
+        <div class="option">
+            <div class="option-header">
+                <h2>Option A: Gmail-Style</h2>
+                <p>Looks like an actual email client</p>
+            </div>
+            <div class="thumbnail-preview">
+                <div class="gmail-thumb">
+                    <div class="gmail-header">
+                        <div class="gmail-avatar">JE</div>
+                        <div class="gmail-meta">
+                            <div class="gmail-from">Jeffrey Epstein</div>
+                            <div class="gmail-to">to Martha Stewart</div>
+                            <div class="gmail-date">Apr 15, 2012</div>
+                        </div>
+                    </div>
+                    <div class="gmail-body">
+                        Martha,<br><br>
+                        Looking forward to <span class="highlight">the party at my Hamptons estate</span> next weekend. The guest list is confirmed — should be an interesting group.<br><br>
+                        <span class="highlight">Please keep this between us.</span>
+                    </div>
+                    <div class="gmail-caption">📄 DOJ Release · Document #4521</div>
+                </div>
+            </div>
+            <div class="option-desc">
+                Mimics a real email client with avatar, sender info, and body. Yellow highlighting on key passages. DOJ attribution caption.
+            </div>
+        </div>
+
+        <!-- Option B: DOJ Redacted -->
+        <div class="option">
+            <div class="option-header">
+                <h2>Option B: Redacted Document</h2>
+                <p>Official FBI/DOJ style with redactions</p>
+            </div>
+            <div class="thumbnail-preview">
+                <div class="doj-thumb">
+                    <div class="doj-header">
+                        <div class="doj-seal">DOJ</div>
+                        <div class="doj-title">Department of Justice<br>Declassified Document</div>
+                    </div>
+                    <div class="doj-body">
+                        <span class="field">FROM:</span> J. EPSTEIN<br>
+                        <span class="field">TO:</span> M. STEWART<br>
+                        <span class="field">DATE:</span> <span class="redacted">████</span> 2012<br><br>
+                        Re: Hamptons party arrangements<br><br>
+                        Guest list includes <span class="redacted">████████</span> and several <span class="redacted">██████</span>. Event scheduled for <span class="redacted">████</span> at the estate.
+                    </div>
+                    <div class="doj-id">DOC ID: DOJ-EPS-2026-04521-DECL</div>
+                    <div class="doj-caption">📄 Released Jan 2026 · FOIA Request</div>
+                </div>
+            </div>
+            <div class="option-desc">
+                Looks like official DOJ release with FBI header, black redaction bars, and document ID. Shows authenticity through government document aesthetics.
+            </div>
+        </div>
+
+        <!-- Option C: Simple Clean -->
+        <div class="option">
+            <div class="option-header">
+                <h2>Option C: Simple & Clean</h2>
+                <p>Minimal, easy to read</p>
+            </div>
+            <div class="thumbnail-preview">
+                <div class="simple-thumb">
+                    <div class="simple-header">
+                        <div class="simple-row">
+                            <span class="simple-label">From:</span>
+                            <span class="simple-value">Jeffrey Epstein</span>
+                        </div>
+                        <div class="simple-row">
+                            <span class="simple-label">To:</span>
+                            <span class="simple-value">Martha Stewart</span>
+                        </div>
+                        <div class="simple-row">
+                            <span class="simple-label">Date:</span>
+                            <span class="simple-value">April 15, 2012</span>
+                        </div>
+                        <div class="simple-row">
+                            <span class="simple-label">Re:</span>
+                            <span class="simple-value">Hamptons Party</span>
+                        </div>
+                    </div>
+                    <div class="simple-body">
+                        Martha,<br><br>
+                        Looking forward to <span class="highlight">the party at my estate</span> next weekend. Should be interesting.<br><br>
+                        <span class="highlight">Keep this between us.</span>
+                    </div>
+                    <div class="simple-caption">
+                        <span>DOJ Document Release</span>
+                        <span>#4521</span>
+                    </div>
+                </div>
+            </div>
+            <div class="option-desc">
+                Plain white background, minimal header fields, body with yellow highlights. Very clean and readable — focuses on content.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

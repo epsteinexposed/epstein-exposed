@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News-Style Email Screenshots</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1f1f1f;--accent:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:#fff;padding:40px;line-height:1.6}
+
+        h1{font-family:'Oswald',sans-serif;font-size:28px;color:var(--accent);text-transform:uppercase;margin-bottom:10px;text-align:center}
+        .subtitle{text-align:center;color:#888;margin-bottom:40px;font-size:14px}
+
+        .mockup{background:#252525;border-radius:8px;margin-bottom:30px;overflow:hidden;border:2px solid #333}
+        .mockup h2{font-size:18px;color:var(--accent);padding:16px 20px;background:#1a1a1a;display:flex;align-items:center;gap:10px}
+        .mockup h2 span{font-size:12px;color:#666;font-weight:normal}
+        .mockup-img{padding:16px;background:#0a0a0a}
+        .mockup-img img{width:100%;border:1px solid #333}
+        .mockup-desc{padding:14px 20px;font-size:13px;color:#999}
+
+        .ref{background:#1a1a1a;padding:20px;margin-bottom:30px;border-left:4px solid var(--accent);border-radius:4px}
+        .ref h3{color:var(--accent);font-size:14px;margin-bottom:10px;text-transform:uppercase}
+        .ref p{font-size:13px;color:#888;line-height:1.6}
+        .ref a{color:#60a5fa}
+    </style>
+</head>
+<body>
+    <h1>📰 News-Style Email Screenshots</h1>
+    <p class="subtitle">Based on how real news outlets (NHPR, etc.) present Epstein documents</p>
+
+    <div class="ref">
+        <h3>Reference: How Real News Sites Do It</h3>
+        <p>From <a href="https://www.nhpr.org/nh-news/2026-01-30/epstein-files-dean-kamen-little-st-james-deka-armi-nh">NHPR's coverage</a>: "Screenshot of an email exchange between Jeffrey Epstein and Dean Kamen in April of 2013, released by the United States Department of Justice." — They use clean, simple screenshots with captions explaining the source.</p>
+    </div>
+
+    <!-- Style 1: Gmail-like screenshot -->
+    <div class="mockup">
+        <h2>Style 1: Gmail-Style Screenshot <span>— Looks like actual email interface</span></h2>
+        <div class="mockup-img">
+            <img src="screenshot-email-realistic.png" alt="Gmail style">
+        </div>
+        <div class="mockup-desc">
+            Mimics a real email client with avatar, sender info, date, and body. Yellow highlighting on incriminating text. Dark caption bar at bottom with DOJ attribution. Clean and authentic.
+        </div>
+    </div>
+
+    <!-- Style 2: Redacted DOJ document -->
+    <div class="mockup">
+        <h2>Style 2: DOJ Document with Redactions <span>— Official FBI/DOJ style</span></h2>
+        <div class="mockup-img">
+            <img src="screenshot-redacted-doc.png" alt="Redacted doc">
+        </div>
+        <div class="mockup-desc">
+            Looks like actual DOJ release with FBI header, black redaction bars, document ID. Shows authenticity - these are real government documents with sensitive info blacked out.
+        </div>
+    </div>
+
+    <!-- Style 3: Simple clean email -->
+    <div class="mockup">
+        <h2>Style 3: Simple Clean Email <span>— Minimal, easy to read</span></h2>
+        <div class="mockup-img">
+            <img src="screenshot-simple-email.png" alt="Simple email">
+        </div>
+        <div class="mockup-desc">
+            Plain white background, simple header fields, body text with yellow highlights. Very clean and readable - focuses on the content. Caption bar explains source.
+        </div>
+    </div>
+
+    <!-- Comparison -->
+    <div class="mockup">
+        <h2>Comparison: Current vs New</h2>
+        <div class="mockup-img" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+                <img src="../images/martha-stewart-parties.png" alt="Current">
+                <p style="text-align:center;color:#666;font-size:12px;margin-top:8px">Current stylized thumbnail</p>
+            </div>
+            <div>
+                <img src="screenshot-simple-email.png" alt="New">
+                <p style="text-align:center;color:#666;font-size:12px;margin-top:8px">New realistic screenshot</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

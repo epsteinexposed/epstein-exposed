@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Thumbnail Styles</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Oswald:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg:#1f1f1f;--accent:#dc2626}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:#fff;padding:40px;line-height:1.6}
+
+        h1{font-family:'Oswald',sans-serif;font-size:32px;color:var(--accent);text-transform:uppercase;margin-bottom:10px;text-align:center}
+        .subtitle{text-align:center;color:#888;margin-bottom:40px}
+
+        .mockup{background:#252525;border-radius:8px;margin-bottom:40px;overflow:hidden;border:2px solid #333}
+        .mockup h2{font-family:'Oswald',sans-serif;font-size:22px;color:var(--accent);padding:20px;background:#1a1a1a;text-transform:uppercase;display:flex;align-items:center;gap:12px}
+        .mockup h2 span{font-size:14px;color:#666;font-weight:normal;text-transform:none}
+        .mockup-img{padding:20px;background:#1a1a1a}
+        .mockup-img img{width:100%;border:1px solid #444;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+        .mockup-desc{padding:20px;font-size:14px;color:#aaa;border-top:1px solid #333}
+        .mockup-desc strong{color:var(--accent)}
+
+        .comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px;padding-top:30px;border-top:1px solid #333}
+        .comparison h3{grid-column:1/-1;font-family:'Oswald',sans-serif;color:#fff;text-transform:uppercase;margin-bottom:10px}
+        .comparison .old, .comparison .new{background:#1a1a1a;padding:15px;border-radius:6px}
+        .comparison img{width:100%;border:1px solid #444}
+        .comparison p{font-size:12px;color:#666;margin-top:10px;text-align:center}
+    </style>
+</head>
+<body>
+    <h1>🎬 Realistic Thumbnail Options</h1>
+    <p class="subtitle">More authentic document styles that look like real evidence</p>
+
+    <!-- Style A: Email Client -->
+    <div class="mockup">
+        <h2>📧 Style A: Email Client Interface <span>— Looks like actual Outlook/Gmail</span></h2>
+        <div class="mockup-img">
+            <img src="realistic-email-client.png" alt="Email client style">
+        </div>
+        <div class="mockup-desc">
+            <strong>Features:</strong> Realistic email client UI with toolbar, From/To/Subject fields,
+            email body with natural formatting, highlighted incriminating text, DOJ evidence footer with
+            document ID. Looks like a screenshot from an actual email program.
+        </div>
+    </div>
+
+    <!-- Style B: Scanned Document -->
+    <div class="mockup">
+        <h2>📄 Style B: Scanned Paper Document <span>— Printed & scanned evidence</span></h2>
+        <div class="mockup-img">
+            <img src="realistic-scanned-doc.png" alt="Scanned document style">
+        </div>
+        <div class="mockup-desc">
+            <strong>Features:</strong> Off-white paper texture with subtle noise, DOJ evidence stamp in corner,
+            typewriter-style monospace text, hand-highlighted sections in yellow, tilted red "EVIDENCE" stamp
+            overlay. Looks like an actual scanned document from a legal case.
+        </div>
+    </div>
+
+    <!-- Style C: PDF Viewer -->
+    <div class="mockup">
+        <h2>📑 Style C: PDF Viewer <span>— Document in PDF reader</span></h2>
+        <div class="mockup-img">
+            <img src="realistic-pdf-viewer.png" alt="PDF viewer style">
+        </div>
+        <div class="mockup-desc">
+            <strong>Features:</strong> Dark PDF viewer chrome with toolbar, white document page with drop shadow,
+            clean document formatting, highlighted key passages, DOJ footer marking. Looks like viewing
+            an official DOJ PDF release.
+        </div>
+    </div>
+
+    <!-- Comparison with current -->
+    <div class="comparison">
+        <h3>📊 Comparison with Current Style</h3>
+        <div class="old">
+            <img src="../images/martha-stewart-parties.png" alt="Current style">
+            <p>Current stylized document</p>
+        </div>
+        <div class="new">
+            <img src="realistic-email-client.png" alt="New realistic style">
+            <p>New realistic email client</p>
+        </div>
+    </div>
+</body>
+</html>
