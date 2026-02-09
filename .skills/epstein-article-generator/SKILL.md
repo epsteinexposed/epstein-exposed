@@ -736,7 +736,19 @@ grep "Epstein Files Daily" firstname-lastname-topic.html | head -1
 
 # 6. index.html has the article card with <img> tag
 grep "firstname-lastname-topic.png" index.html
+
+# 7. ⚠️ CRITICAL: Article has ACTUAL CONTENT (not just template shell)
+# Must have section headers (returns 3+)
+grep -c "<h3>" firstname-lastname-topic.html
+
+# Must have document evidence boxes (returns 2+)
+grep -c "doc-evidence" firstname-lastname-topic.html
+
+# Must have substantial paragraphs (returns 10+)
+grep -c "<p>" firstname-lastname-topic.html
 ```
+
+**⚠️ CONTENT CHECK IS CRITICAL**: If the article only has 1-2 `<p>` tags and 0 `<h3>` headers, the article body is EMPTY. This happened before and resulted in a broken article being published. DO NOT SKIP THIS CHECK.
 
 **If any check fails, DO NOT commit. Fix the issue first.**
 
@@ -758,7 +770,7 @@ git push
 ## Summary of Key Rules
 
 1. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
-2. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding
+2. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding, AND actual content (3+ `<h3>` headers, 2+ doc-evidence boxes, 10+ `<p>` tags)
 3. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news
 4. **Thumbnails**: MANDATORY - **MUST choose style based on article content (NOT always email!)**:
    - 💰 **Wire Transfer**: payments, investments, donations, financial deals
