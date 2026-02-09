@@ -671,7 +671,11 @@ Save HTML to workspace: `firstname-lastname-topic.html` (lowercase, hyphens)
 
 #### 7a. Add article card to `index.html`
 
-**IMPORTANT**: The article card MUST include the thumbnail image. Use this exact format:
+**IMPORTANT**: The article card MUST include the thumbnail image AND have the correct structure.
+
+**⚠️ CRITICAL LAYOUT RULE**: The `.lede` and `.read-more` elements MUST be INSIDE the `article-title-section` div, NOT outside it. If placed outside, the snippet text will appear BELOW the thumbnail instead of to the right of it.
+
+Use this exact format:
 
 ```html
 <!-- AUTO-GENERATED ARTICLE: FIRSTNAME LASTNAME -->
@@ -765,7 +769,7 @@ git push
    **⚠️ DO NOT default to email! Use Wire for money, Calendar for meetings!**
    All styles have: yellow highlights, dark navy DOJ bar at bottom
 5. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
-6. **Article cards**: MUST include `<img>` thumbnail tag
+6. **Article cards**: MUST include `<img>` thumbnail tag, `.lede` and `.read-more` MUST be INSIDE `article-title-section` (not outside)
 7. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
 
 ## Quick Verification Commands
