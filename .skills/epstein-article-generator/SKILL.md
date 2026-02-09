@@ -154,8 +154,12 @@ All thumbnail styles include:
 - White/light background for document authenticity
 - Yellow highlight on incriminating text
 - Dark navy DOJ bar at bottom with document number
+- **Image size: 500x300 pixels** (displayed at 420px width in CSS grid)
 
 **Thumbnail filename format**: `firstname-lastname-topic.png` (lowercase, hyphens)
+
+**CSS Display Size**: Thumbnails display at **420px width** in article cards (same as TOP STORY).
+This is set in index.html: `.article-preview.featured .article-top{grid-template-columns:420px 1fr}`
 
 ---
 
