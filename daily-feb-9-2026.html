@@ -55,7 +55,7 @@
         article.article h1{font-family:'Oswald',sans-serif;font-size:38px;font-weight:700;line-height:1.1;margin-bottom:16px;text-transform:uppercase;letter-spacing:0.5px}
         article.article .lede{font-size:18px;color:var(--text-muted);margin-bottom:24px;line-height:1.6}
         .lede-bullets{margin:0 0 32px 0;padding-left:0;list-style:none}
-        .lede-bullets li{font-size:17px;color:var(--text-muted);margin-bottom:20px;position:relative;padding-left:24px;line-height:1.7}
+        .lede-bullets li{font-size:18px;color:var(--text-muted);margin-bottom:20px;position:relative;padding-left:24px;line-height:1.7}
         .lede-bullets li::before{content:"•";color:var(--accent);font-weight:bold;position:absolute;left:0;font-size:20px}
         .lede-bullets li strong{color:var(--text)}
         .lede-bullets .source-link{color:var(--accent);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;text-decoration:none;white-space:nowrap}
@@ -109,10 +109,13 @@
             font-size: 12px;
         }
 
-        .source-box{background:#000;border:1px solid var(--border);padding:20px;margin:32px 0 0}
-        .source-box .label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
-        .source-box .doj-link{display:inline-block;background:var(--accent);color:#fff;padding:10px 20px;font-weight:700;margin-top:12px;text-transform:uppercase;letter-spacing:1px;font-size:13px;text-decoration:none}
-        .source-box .doj-link:hover{background:#b91c1c}
+        .newsletter{background:var(--accent);padding:28px 24px;margin:32px 0 0;text-align:center}
+        .newsletter h3{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;margin-bottom:8px;color:#fff;text-transform:uppercase;letter-spacing:1px}
+        .newsletter p{color:rgba(255,255,255,0.85);font-size:14px;margin-bottom:16px}
+        .newsletter-form{display:flex;gap:0;max-width:450px;margin:0 auto}
+        .newsletter-form input{flex:1;padding:12px 14px;border:none;font-size:14px;background:#fff;font-family:'Inter',sans-serif}
+        .newsletter-form button{background:#000;color:#fff;border:none;padding:12px 20px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
+        .newsletter-form button:hover{background:#222}
 
         .share-section{margin:32px 0;padding:24px;background:#292929;border:1px solid var(--border)}
         .share-section .share-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
@@ -190,10 +193,15 @@
                 <li><strong>The full scope</strong> of tech industry connections is still being uncovered as researchers comb through millions of pages. Names include Musk, Gates, Thiel, Brin, Lutnick, and Branson among others. <a href="https://www.cnn.com/2026/02/03/politics/epstein-files-musk-lutnick-branson-emails" target="_blank" class="source-link">CNN →</a></li>
             </ul>
 
-            <div class="source-box">
-                <div class="label">📋 Browse the Files Yourself</div>
-                <a href="https://www.justice.gov/epstein/doj-disclosures" class="doj-link" target="_blank" rel="noopener">DOJ Epstein Library →</a>
-            </div>
+            <section class="newsletter">
+                <h3>Get the Files in Your Inbox</h3>
+                <p>New revelations as we find them. No spam. Just receipts.</p>
+                <form class="newsletter-form" action="https://epstein-exposed.us13.list-manage.com/subscribe/post?u=dbf04846cbc14c3a4d734f311&amp;id=a2f4925a23&amp;f_id=00cdace2f0" method="post" target="_blank">
+                    <input type="email" name="EMAIL" placeholder="your@email.com" required>
+                    <div style="position:absolute;left:-5000px" aria-hidden="true"><input type="text" name="b_dbf04846cbc14c3a4d734f311_a2f4925a23" tabindex="-1" value=""></div>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </section>
 
             <div class="share-section">
                 <div class="share-label">Share today's roundup</div>
