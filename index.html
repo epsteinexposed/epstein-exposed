@@ -110,26 +110,29 @@
         .logo-text{font-family:'Oswald',sans-serif;font-size:32px;font-weight:700;color:#fff;display:flex;flex-direction:column;line-height:1;text-transform:uppercase;letter-spacing:1px}
         .logo-text .daily{font-size:14px;font-weight:600;letter-spacing:3px;opacity:0.9;margin-top:2px}
 
-        /* HEADER CENTER - SEARCH + TRENDING */
-        .header-center{flex:1;display:flex;align-items:center;gap:20px;padding:0 24px}
-        .header-search{display:flex;gap:0;max-width:450px;flex:1}
-        .header-search input{flex:1;padding:10px 14px;border:none;background:#1a1a1a;color:#fff;font-size:14px;font-family:'Inter',sans-serif;min-width:280px}
+        /* HEADER CENTER - SEARCH + EMAIL */
+        .header-center{flex:1;display:flex;align-items:center;gap:24px;padding:0 24px}
+        .header-search-wrapper{position:relative;flex:1;max-width:320px}
+        .header-search{display:flex;gap:0}
+        .header-search input{flex:1;padding:10px 14px;border:none;background:#1a1a1a;color:#fff;font-size:14px;font-family:'Inter',sans-serif;width:100%}
         .header-search input:focus{outline:none;background:#252525}
         .header-search input::placeholder{color:#666}
         .header-search button{background:#333;color:#fff;border:none;padding:10px 16px;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;cursor:pointer;text-transform:uppercase;letter-spacing:1px}
         .header-search button:hover{background:var(--accent)}
-        .trending{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-        .trending-label{font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px}
-        .trending-names{display:flex;gap:8px;flex-wrap:wrap}
-        .trending-name{background:#333;color:#fff;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;border:none;font-family:'Inter',sans-serif}
+        .search-dropdown{display:none;position:absolute;top:100%;left:0;right:0;background:#252525;border:1px solid var(--border);border-top:none;padding:12px;z-index:200}
+        .search-dropdown.visible{display:block}
+        .search-dropdown-label{font-size:10px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+        .search-dropdown-names{display:flex;gap:6px;flex-wrap:wrap}
+        .trending-name{background:#333;color:#fff;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;border:none;font-family:'Inter',sans-serif}
         .trending-name:hover{background:var(--accent)}
-
-        /* BREAKING NEWS BAR */
-        .breaking-bar{background:#1a1a1a;padding:8px 20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
-        .breaking-label{background:var(--accent);color:#fff;padding:4px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;animation:pulse 2s infinite}
-        .breaking-text{color:var(--text-muted)}
-        .breaking-text strong{color:#fff}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.7}}
+        .header-email{display:flex;align-items:center;gap:12px}
+        .header-email-label{font-size:12px;color:#999;font-weight:500;white-space:nowrap}
+        .header-email-form{display:flex;gap:0}
+        .header-email-form input{padding:8px 12px;border:none;background:#1a1a1a;color:#fff;font-size:13px;font-family:'Inter',sans-serif;width:180px}
+        .header-email-form input:focus{outline:none;background:#252525}
+        .header-email-form input::placeholder{color:#666}
+        .header-email-form button{background:var(--accent);color:#fff;border:none;padding:8px 14px;font-family:'Inter',sans-serif;font-weight:700;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px}
+        .header-email-form button:hover{background:#b91c1c}
 
         /* FULL-WIDTH LAYOUT */
         .page-wrapper{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 80px)}
@@ -296,18 +299,28 @@
                 <span class="logo-text">EPSTEIN FILES<span class="daily">DAILY</span></span>
             </a>
             <div class="header-center">
-                <div class="header-search">
-                    <input type="text" id="header-search-input" placeholder="Search names..." aria-label="Search articles">
-                    <button type="button" id="header-search-btn">GO</button>
-                </div>
-                <div class="trending">
-                    <span class="trending-label">Trending:</span>
-                    <div class="trending-names">
-                        <button class="trending-name" data-name="peter thiel">THIEL</button>
-                        <button class="trending-name" data-name="elon musk">MUSK</button>
-                        <button class="trending-name" data-name="sergey brin">BRIN</button>
-                        <button class="trending-name" data-name="bill gates">GATES</button>
+                <div class="header-search-wrapper">
+                    <div class="header-search">
+                        <input type="text" id="header-search-input" placeholder="Search names..." aria-label="Search articles">
+                        <button type="button" id="header-search-btn">GO</button>
                     </div>
+                    <div class="search-dropdown" id="search-dropdown">
+                        <div class="search-dropdown-label">Trending Names</div>
+                        <div class="search-dropdown-names">
+                            <button class="trending-name" data-name="peter thiel">THIEL</button>
+                            <button class="trending-name" data-name="elon musk">MUSK</button>
+                            <button class="trending-name" data-name="sergey brin">BRIN</button>
+                            <button class="trending-name" data-name="bill gates">GATES</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-email">
+                    <span class="header-email-label">Get updates:</span>
+                    <form class="header-email-form" action="https://epstein-exposed.us13.list-manage.com/subscribe/post?u=dbf04846cbc14c3a4d734f311&amp;id=a2f4925a23&amp;f_id=00cdace2f0" method="post" target="_blank">
+                        <input type="email" name="EMAIL" placeholder="your@email.com" required>
+                        <div style="position:absolute;left:-5000px" aria-hidden="true"><input type="text" name="b_dbf04846cbc14c3a4d734f311_a2f4925a23" tabindex="-1" value=""></div>
+                        <button type="submit">GO</button>
+                    </form>
                 </div>
             </div>
             <div class="header-controls">
@@ -320,11 +333,6 @@
             </div>
         </div>
     </header>
-
-    <div class="breaking-bar">
-        <span class="breaking-label">BREAKING</span>
-        <span class="breaking-text"><strong>3.5 MILLION</strong> pages of DOJ documents now released. We're going through everything.</span>
-    </div>
 
     <div class="page-wrapper">
         <!-- SIDEBAR -->
@@ -657,6 +665,17 @@
                 }
             });
 
+            // Search dropdown show/hide
+            const searchDropdown = document.getElementById('search-dropdown');
+            headerSearchInput.addEventListener('focus', () => {
+                searchDropdown.classList.add('visible');
+            });
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.header-search-wrapper')) {
+                    searchDropdown.classList.remove('visible');
+                }
+            });
+
             // Trending name buttons
             document.querySelectorAll('.trending-name').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -666,6 +685,7 @@
                     filterArticles(name);
                     updateActiveTag(name);
                     history.pushState({}, '', '?search=' + encodeURIComponent(name));
+                    searchDropdown.classList.remove('visible');
                 });
             });
 
