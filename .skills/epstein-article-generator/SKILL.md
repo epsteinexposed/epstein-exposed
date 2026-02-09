@@ -10,10 +10,28 @@ description: |
 
 Generate investigative journalism articles for epsteinfilesdaily.com based on DOJ file releases.
 
+## 🚨🚨🚨 ABSOLUTE RULE: NO FABRICATED DOCUMENTS 🚨🚨🚨
+
+**NEVER fabricate, invent, or make up:**
+- Document IDs (e.g., "EFTA01928475.pdf")
+- Email content or quotes
+- Flight logs or passenger lists
+- Financial records or wire transfers
+- Any "evidence" not found in actual DOJ files
+
+**EVERY quote, document reference, and claim MUST come from a real, verifiable DOJ document.**
+
+If you cannot find real documents to support a story, DO NOT WRITE THE STORY.
+
+---
+
 ## ⚠️ CRITICAL CHECKLIST - VERIFY BEFORE PUBLISHING
 
 Before pushing ANY article, confirm ALL of these are complete:
 
+- [ ] **REAL DOCUMENTS FOUND** - You have actual DOJ document URLs that work
+- [ ] **DOCUMENTS VERIFIED** - You clicked the links and confirmed they exist
+- [ ] **QUOTES ARE REAL** - Every quote comes directly from a real document
 - [ ] **Article created FROM TEMPLATE** - MUST copy `references/article-template.html` as base
 - [ ] **Article has theme-toggle** - Verify with: `grep -c "theme-toggle" article.html` (should return 6)
 - [ ] **Thumbnail image created** in `images/` folder
@@ -46,53 +64,80 @@ The template includes critical features that MUST be present:
 
 ## Workflow
 
-### Step 1: Check Covered Topics
+### Step 1: FIND REAL DOCUMENTS FIRST (MANDATORY)
+
+**DO NOT WRITE ANYTHING until you have found real documents.**
+
+1. **Browse the DOJ Epstein files**: https://www.justice.gov/epstein
+2. **Navigate to actual data sets**: https://www.justice.gov/epstein/files
+3. **Find specific PDF documents** with interesting content
+4. **Record the ACTUAL URLs** in this format:
+   ```
+   https://www.justice.gov/epstein/files/DataSet%2010/EFTA01998027.pdf
+   ```
+
+**How to find documents:**
+- Browse data set folders (DataSet 1, DataSet 2, etc.)
+- Look for PDFs containing emails, flight logs, financial records
+- Search for names of interest within documents
+- Note exact file paths and document IDs
+
+**You MUST have at least 2-3 real document URLs before proceeding.**
+
+### Step 2: VERIFY DOCUMENTS EXIST
+
+**Click every document link and confirm:**
+- [ ] The URL loads (not 404)
+- [ ] The document contains what you think it contains
+- [ ] You can quote directly from the actual text
+
+```bash
+# Test that document URLs work:
+curl -I "https://www.justice.gov/epstein/files/DataSet%2010/EFTA01998027.pdf"
+# Should return HTTP 200, not 404
+```
+
+**If a document doesn't exist, DO NOT USE IT. Find a different one.**
+
+### Step 3: Check Covered Topics
 
 Read `references/covered-topics.md` to see what's already published. Do NOT repeat stories.
 
-### Step 2: Find New Source Material
+### Step 4: Extract Real Content from Documents
 
-Search DOJ Epstein files (https://www.justice.gov/epstein) for interesting stories:
-- **Documents/Emails**: PDFs with revealing correspondence
-- **Images**: Photos from the releases
-- **Videos**: Depositions or footage
-- **Flight logs**: Lolita Express passenger records
-- **Financial records**: Wire transfers, payments
+**Only after verifying documents, extract:**
+- Actual quotes (copy exact text from PDFs)
+- Real names mentioned in documents
+- Actual dates from correspondence
+- Real document IDs from file names
 
-**Prioritize lesser-known names** over repeated coverage of big names. Look for:
-- Business executives, foreign dignitaries, entertainment figures
-- Academics/scientists, financial industry connections
-- Real estate deals, foundation/charity connections
+**NEVER paraphrase into something the document doesn't say.**
+**NEVER invent quotes or conversations.**
+**NEVER add details not in the source documents.**
 
-### Step 3: Verify Sources
-
-- **ONLY use DOJ sources** - NO external news sources (PBS, CBS, CNN, etc.)
-- Only use real DOJ document IDs (format: EFTAxxxxxxxx.pdf)
-- Verify URLs exist at justice.gov
-- Quote directly from documents
-- All source-box links must point to justice.gov/epstein domains
-
-### Step 4: Write Article (MUST USE TEMPLATE)
+### Step 5: Write Article (MUST USE TEMPLATE + REAL DOCUMENTS ONLY)
 
 **⚠️ CRITICAL: You MUST use the template file. DO NOT write HTML from scratch.**
 
-**Step 4a: Read the template first**
+**Step 5a: Read the template first**
 ```bash
 cat references/article-template.html
 ```
 
-**Step 4b: Copy template and replace placeholders**
+**Step 5b: Copy template and replace placeholders**
 
 The template uses these placeholders - replace ALL of them:
-- `{{HEADLINE}}` - Article headline
+- `{{HEADLINE}}` - Article headline (based on REAL document content)
 - `{{META_DESCRIPTION}}` - SEO description (150-160 chars)
 - `{{SLUG}}` - URL slug (e.g., `martha-stewart-epstein-parties`)
 - `{{THUMBNAIL_FILENAME}}` - Thumbnail filename without extension
 - `{{PERSON_TAG}}` - Person's full name for tag
 - `{{DATE}}` - Publication date
-- `{{ARTICLE_CONTENT}}` - The actual article body
+- `{{ARTICLE_CONTENT}}` - The actual article body (ONLY what's in real documents)
 
-**Step 4c: Verify article has required features**
+**⚠️ REMINDER: All doc-evidence boxes MUST use real, verified document URLs from Step 1-2.**
+
+**Step 5c: Verify article has required features**
 ```bash
 # Must return 6 (theme toggle elements)
 grep -c "theme-toggle" your-article.html
@@ -110,7 +155,7 @@ grep "var(--bg)" your-article.html | head -1
 
 **Style**: Tabloid tone but factual, short paragraphs, pull quotes for damning evidence
 
-### Step 5: Create Thumbnail Image (MANDATORY)
+### Step 6: Create Thumbnail Image (MANDATORY)
 
 **⚠️ THIS STEP IS REQUIRED - DO NOT SKIP**
 
@@ -663,13 +708,13 @@ create_authentic_text_message(
 ls -la images/firstname-lastname-topic.png
 ```
 
-### Step 6: Save Article
+### Step 7: Save Article
 
 Save HTML to workspace: `firstname-lastname-topic.html` (lowercase, hyphens)
 
-### Step 7: Update Site
+### Step 8: Update Site
 
-#### 7a. Add article card to `index.html`
+#### 8a. Add article card to `index.html`
 
 **IMPORTANT**: The article card MUST include the thumbnail image AND have the correct structure.
 
@@ -706,15 +751,15 @@ Use this exact format:
 - Search href: Use `+` for spaces (e.g., `?search=woody+allen`)
 - **ONLY use individual FULL names** - NO last names only, NO company names, NO country names
 
-#### 7b. Add to feed.xml
+#### 8b. Add to feed.xml
 
 Add new `<item>` with RFC 822 date format.
 
-#### 7c. Update covered-topics.md
+#### 8c. Update covered-topics.md
 
 Add the new topic to prevent duplicates.
 
-### Step 8: Verify and Publish
+### Step 9: Verify and Publish
 
 **Before committing, run ALL these verification checks:**
 
@@ -769,10 +814,13 @@ git push
 
 ## Summary of Key Rules
 
-1. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
-2. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding, AND actual content (3+ `<h3>` headers, 2+ doc-evidence boxes, 10+ `<p>` tags)
-3. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news
-4. **Thumbnails**: MANDATORY - **MUST choose style based on article content (NOT always email!)**:
+1. **🚨 NO FABRICATED DOCUMENTS**: NEVER invent document IDs, quotes, or evidence. Every claim MUST come from a REAL, VERIFIED DOJ document with a working URL. If you can't find real documents, DON'T WRITE THE STORY.
+2. **FIND DOCUMENTS FIRST**: Always start by browsing https://www.justice.gov/epstein/files and finding real PDFs BEFORE writing anything
+3. **VERIFY ALL LINKS**: Click every DOJ link to confirm it returns HTTP 200, not 404
+4. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
+5. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding, AND actual content (3+ `<h3>` headers, 2+ doc-evidence boxes, 10+ `<p>` tags)
+6. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news, NO fabricated search URLs
+7. **Thumbnails**: MANDATORY - **MUST choose style based on article content (NOT always email!)**:
    - 💰 **Wire Transfer**: payments, investments, donations, financial deals
    - 📅 **Calendar**: meetings, dinners, visits, appointments
    - ✈️ **Flight Log**: flights, travel, island trips
@@ -780,10 +828,10 @@ git push
    - 📧 **Email**: ONLY for actual email correspondence, legal letters
    **⚠️ DO NOT default to email! Use Wire for money, Calendar for meetings!**
    All styles have: yellow highlights, dark navy DOJ bar at bottom
-5. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
-6. **Article cards**: MUST include `<img>` thumbnail tag, `.lede` and `.read-more` MUST be INSIDE `article-title-section` (not outside)
-7. **Lede text**: MUST match the article's `<p class="lede">` subtitle/tagline exactly - the compelling hook after the headline, NOT a generic summary
-8. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
+8. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
+9. **Article cards**: MUST include `<img>` thumbnail tag, `.lede` and `.read-more` MUST be INSIDE `article-title-section` (not outside)
+10. **Lede text**: MUST match the article's `<p class="lede">` subtitle/tagline exactly - the compelling hook after the headline, NOT a generic summary
+11. **og:image**: Point to `https://epsteinfilesdaily.com/images/[thumbnail].png`
 
 ## Quick Verification Commands
 
