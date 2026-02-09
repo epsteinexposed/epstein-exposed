@@ -114,6 +114,26 @@ grep "var(--bg)" your-article.html | head -1
 
 **⚠️ THIS STEP IS REQUIRED - DO NOT SKIP**
 
+**Use the ready-to-use script:** `references/create_thumbnail.py`
+
+```python
+# Import and use the thumbnail generator:
+import sys
+sys.path.insert(0, 'references')
+from create_thumbnail import create_email_thumbnail, create_flight_thumbnail, create_wire_thumbnail, create_calendar_thumbnail, create_text_thumbnail
+
+# Then call the appropriate function (see examples below)
+```
+
+**Choose the appropriate style based on article content:**
+| Style | Function | Use For |
+|-------|----------|---------|
+| 📧 Email | `create_email_thumbnail()` | Correspondence, memos (default) |
+| ✈️ Flight | `create_flight_thumbnail()` | Lolita Express, travel records |
+| 💰 Wire | `create_wire_thumbnail()` | Financial records, payments |
+| 📅 Calendar | `create_calendar_thumbnail()` | Meetings, dinners, appointments |
+| 💬 Text | `create_text_thumbnail()` | Text messages, chats |
+
 **DEFAULT STYLE: Authentic Leaked Email**
 
 All thumbnails should look like actual leaked DOJ email screenshots with:
