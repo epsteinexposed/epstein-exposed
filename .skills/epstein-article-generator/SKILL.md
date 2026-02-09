@@ -114,6 +114,8 @@ grep "var(--bg)" your-article.html | head -1
 
 **⚠️ THIS STEP IS REQUIRED - DO NOT SKIP**
 
+**⚠️ IMPORTANT: DO NOT USE ONLY EMAIL THUMBNAILS - CHOOSE THE RIGHT STYLE!**
+
 **Use the ready-to-use script:** `references/create_thumbnail.py`
 
 ```python
@@ -122,25 +124,35 @@ import sys
 sys.path.insert(0, 'references')
 from create_thumbnail import create_email_thumbnail, create_flight_thumbnail, create_wire_thumbnail, create_calendar_thumbnail, create_text_thumbnail
 
-# Then call the appropriate function (see examples below)
+# Then call the appropriate function based on article content (see decision tree below)
 ```
 
-**Choose the appropriate style based on article content:**
-| Style | Function | Use For |
-|-------|----------|---------|
-| 📧 Email | `create_email_thumbnail()` | Correspondence, memos (default) |
-| ✈️ Flight | `create_flight_thumbnail()` | Lolita Express, travel records |
-| 💰 Wire | `create_wire_thumbnail()` | Financial records, payments |
-| 📅 Calendar | `create_calendar_thumbnail()` | Meetings, dinners, appointments |
-| 💬 Text | `create_text_thumbnail()` | Text messages, chats |
+## 🎯 THUMBNAIL STYLE DECISION TREE (MUST FOLLOW)
 
-**DEFAULT STYLE: Authentic Leaked Email**
+**Step 5a: Determine article type and use the CORRECT thumbnail style:**
 
-All thumbnails should look like actual leaked DOJ email screenshots with:
-- Plain white background
-- Email headers (To/From/Sent/Subject) with full email addresses
+| If article is about... | Use this style | Function |
+|------------------------|----------------|----------|
+| 💰 **Money/Payments/Investments/Donations** | WIRE TRANSFER | `create_wire_thumbnail()` |
+| 📅 **Meetings/Dinners/Visits/Appointments** | CALENDAR | `create_calendar_thumbnail()` |
+| ✈️ **Flights/Travel/Island visits** | FLIGHT LOG | `create_flight_thumbnail()` |
+| 💬 **Text conversations/Chats** | TEXT MESSAGE | `create_text_thumbnail()` |
+| 📧 **Emails/Letters/Legal correspondence** | EMAIL | `create_email_thumbnail()` |
+
+**EXAMPLES:**
+- Article about "$10M payment to foundation" → **WIRE TRANSFER** (not email!)
+- Article about "secret dinner meetings" → **CALENDAR** (not email!)
+- Article about "Lolita Express flights" → **FLIGHT LOG** (not email!)
+- Article about "private island visits" → **CALENDAR** (shows appointment)
+- Article about "text messages revealed" → **TEXT MESSAGE** (not email!)
+- Article about "email correspondence" → **EMAIL**
+- Article about "legal retainer agreement" → **EMAIL** (legal correspondence)
+
+**DO NOT default to email for everything! The variety makes the site look professional.**
+
+All thumbnail styles include:
+- White/light background for document authenticity
 - Yellow highlight on incriminating text
-- "Sent from my BlackBerry®" signature
 - Dark navy DOJ bar at bottom with document number
 
 **Thumbnail filename format**: `firstname-lastname-topic.png` (lowercase, hyphens)
@@ -740,12 +752,13 @@ git push
 1. **TEMPLATE IS MANDATORY**: ALWAYS copy `references/article-template.html` - NEVER write HTML from scratch
 2. **Verify before publishing**: Article must have theme-toggle (grep returns 6), dark theme CSS, correct branding
 3. **Sources**: ONLY use DOJ sources (justice.gov/epstein) - NO external news
-4. **Thumbnails**: MANDATORY - Choose appropriate authentic style based on content:
-   - 📧 **Email**: correspondence, memos (default)
-   - ✈️ **Flight Log**: travel records, Lolita Express
-   - 💰 **Wire Transfer**: financial records, payments
-   - 📅 **Calendar**: meetings, dinners, appointments
+4. **Thumbnails**: MANDATORY - **MUST choose style based on article content (NOT always email!)**:
+   - 💰 **Wire Transfer**: payments, investments, donations, financial deals
+   - 📅 **Calendar**: meetings, dinners, visits, appointments
+   - ✈️ **Flight Log**: flights, travel, island trips
    - 💬 **Text Message**: text conversations, chats
+   - 📧 **Email**: ONLY for actual email correspondence, legal letters
+   **⚠️ DO NOT default to email! Use Wire for money, Calendar for meetings!**
    All styles have: yellow highlights, dark navy DOJ bar at bottom
 5. **Tags**: FULL names only (e.g., "woody allen" not "allen"), NO company/country names
 6. **Article cards**: MUST include `<img>` thumbnail tag
