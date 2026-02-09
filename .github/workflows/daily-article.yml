@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install anthropic requests beautifulsoup4 tweepy
+          pip install anthropic pillow
 
       - name: Generate article
         id: generate

@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """
-Daily Article Generator for Epstein Exposed
-Calls Claude API to research DOJ files and generate a new article.
+Daily Roundup Generator for Epstein Files Daily
+Calls Claude API to research news and generate a daily roundup.
 """
 
 import os
 import json
 import re
+import random
+import urllib.parse
 from datetime import datetime
 from anthropic import Anthropic
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 # Initialize Anthropic client
 client = Anthropic()
@@ -20,387 +23,338 @@ def read_file(path):
 
 def write_file(path, content):
     """Write content to a file."""
+    os.makedirs(os.path.dirname(path) if os.path.dirname(path) else '.', exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
-def get_covered_topics():
-    """Read the list of already covered topics."""
-    try:
-        return read_file('.skills/epstein-article-generator/references/covered-topics.md')
-    except FileNotFoundError:
-        return "No covered topics file found."
-
-def get_article_template():
-    """Read the article HTML template."""
-    try:
-        return read_file('.skills/epstein-article-generator/references/article-template.html')
-    except FileNotFoundError:
-        return None
-
-def get_existing_articles():
-    """Get list of existing article files."""
-    articles = []
+def get_existing_roundups():
+    """Get list of existing daily roundup files."""
+    roundups = []
     for f in os.listdir('.'):
-        if f.endswith('.html') and f not in ['index.html', 'about.html', 'archive.html', 'privacy.html']:
-            articles.append(f)
-    return articles
+        if f.startswith('daily-') and f.endswith('.html'):
+            roundups.append(f)
+    return roundups
 
-def generate_article():
-    """Call Claude to generate a new article."""
+def generate_thumbnail(date_str, headline, filename):
+    """Generate newspaper-style thumbnail with paper texture."""
 
-    covered_topics = get_covered_topics()
-    template = get_article_template()
-    existing = get_existing_articles()
+    WIDTH = 840
+    HEIGHT = 472
+
+    # Create aged paper background
+    img = Image.new('RGB', (WIDTH, HEIGHT), '#f4ead5')
+    draw = ImageDraw.Draw(img)
+    pixels = img.load()
+
+    # Add paper texture - noise
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            r, g, b = pixels[x, y]
+            noise = random.randint(-8, 8)
+            edge_dist = min(x, WIDTH-x, y, HEIGHT-y)
+            edge_darken = max(0, 15 - edge_dist // 8)
+            r = max(0, min(255, r + noise - edge_darken))
+            g = max(0, min(255, g + noise - edge_darken - 3))
+            b = max(0, min(255, b + noise - edge_darken - 8))
+            pixels[x, y] = (r, g, b)
+
+    # Add vignette
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            r, g, b = pixels[x, y]
+            cx, cy = WIDTH // 2, HEIGHT // 2
+            dist = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+            max_dist = ((cx) ** 2 + (cy) ** 2) ** 0.5
+            vignette = 1 - (dist / max_dist) * 0.15
+            pixels[x, y] = (int(r * vignette), int(g * vignette), int(b * vignette))
+
+    draw = ImageDraw.Draw(img)
+    ink = '#1a1816'
+    ink_light = '#4a4540'
+
+    # Try to load fonts
+    try:
+        font_masthead = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
+        font_tagline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf", 15)
+        font_dateline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf", 12)
+        font_headline = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf", 52)
+    except:
+        font_masthead = ImageFont.load_default()
+        font_tagline = ImageFont.load_default()
+        font_dateline = ImageFont.load_default()
+        font_headline = ImageFont.load_default()
+
+    # Border
+    draw.rectangle([(8, 8), (WIDTH-9, HEIGHT-9)], outline='#c4b89c', width=1)
+
+    # Masthead
+    masthead_text = "EPSTEIN FILES DAILY"
+    bbox = draw.textbbox((0, 0), masthead_text, font=font_masthead)
+    text_width = bbox[2] - bbox[0]
+    draw.text(((WIDTH - text_width) / 2, 28), masthead_text, fill=ink, font=font_masthead)
+
+    # Tagline
+    tagline_text = "Comprehensive Coverage of the DOJ Document Releases"
+    bbox = draw.textbbox((0, 0), tagline_text, font=font_tagline)
+    text_width = bbox[2] - bbox[0]
+    draw.text(((WIDTH - text_width) / 2, 90), tagline_text, fill=ink_light, font=font_tagline)
+
+    # Line
+    draw.line([(50, 118), (WIDTH - 50, 118)], fill=ink, width=1)
+
+    # Date bar
+    vol_num = len(get_existing_roundups()) + 1
+    vol_text = f"Vol. I, No. {vol_num}"
+    draw.text((60, 128), vol_text, fill=ink_light, font=font_dateline)
+    bbox = draw.textbbox((0, 0), date_str, font=font_dateline)
+    text_width = bbox[2] - bbox[0]
+    draw.text((WIDTH - text_width - 60, 128), date_str, fill=ink_light, font=font_dateline)
+
+    # Double line
+    draw.line([(50, 152), (WIDTH - 50, 152)], fill=ink, width=1)
+    draw.line([(50, 156), (WIDTH - 50, 156)], fill=ink, width=2)
+
+    # Headline (split into lines)
+    words = headline.split()
+    lines = []
+    current_line = []
+    for word in words:
+        test_line = ' '.join(current_line + [word])
+        bbox = draw.textbbox((0, 0), test_line, font=font_headline)
+        if bbox[2] - bbox[0] > WIDTH - 100:
+            if current_line:
+                lines.append(' '.join(current_line))
+                current_line = [word]
+            else:
+                lines.append(word)
+                current_line = []
+        else:
+            current_line.append(word)
+    if current_line:
+        lines.append(' '.join(current_line))
+
+    # Draw headline centered
+    y_start = 190
+    line_height = 70
+    for i, line in enumerate(lines[:3]):  # Max 3 lines
+        bbox = draw.textbbox((0, 0), line, font=font_headline)
+        text_width = bbox[2] - bbox[0]
+        draw.text(((WIDTH - text_width) / 2, y_start + i * line_height), line, fill=ink, font=font_headline)
+
+    # Slight blur
+    img = img.filter(ImageFilter.GaussianBlur(radius=0.3))
+
+    # Save
+    os.makedirs('images', exist_ok=True)
+    img.save(filename, 'PNG')
+    print(f"Created thumbnail: {filename}")
+
+def generate_roundup():
+    """Call Claude to research and generate a daily roundup."""
+
+    existing = get_existing_roundups()
     today = datetime.now()
+    day_name = today.strftime('%A')
 
-    prompt = f"""You are a journalist writing for Epstein Exposed, a news site covering the DOJ Epstein file releases.
+    prompt = f"""You are a news aggregator for Epstein Files Daily, a site covering the DOJ Epstein file releases.
 
-ALREADY COVERED TOPICS (DO NOT REPEAT):
-{covered_topics}
+TODAY'S DATE: {day_name}, {today.strftime('%B %d, %Y')}
 
-EXISTING ARTICLE FILES: {existing}
-
-TODAY'S DATE: {today.strftime('%B %d, %Y')}
+EXISTING ROUNDUPS (don't repeat these stories): {existing}
 
 YOUR TASK:
-1. Research the DOJ Epstein files at https://www.justice.gov/epstein to find an interesting, newsworthy document that has NOT been covered yet.
-2. Focus on lesser-known names - avoid Trump, Clinton, Musk, Bannon, Lutnick, Prince Andrew unless you find truly new information.
-3. Look for: emails, flight logs, financial records, photos, videos, depositions, or other documents.
-4. Write a tabloid-style article (800-1200 words) that is:
-   - Punchy and dramatic
-   - SEO-optimized with a compelling headline
-   - Factual and sourced
+1. Search for the latest Epstein-related news from today or the past few days
+2. Find 4-6 distinct news stories from reputable sources
+3. Focus on: DOJ document releases, new revelations about connections, legal developments, investigations
 
-CRITICAL - USE THIS EXACT HTML STRUCTURE FOR DOCUMENT EVIDENCE BOXES:
+SOURCES TO CHECK:
+- Major news: NBC, CNBC, CNN, PBS, NYT, WSJ, Washington Post
+- Tech news: The Verge, Wired, Ars Technica
+- Local papers: SF Chronicle, Mercury News, Miami Herald
+- Wire services: AP, Reuters
 
-<div class="doc-evidence">
-    <div class="doc-header">
-        <span class="doc-id">📄 DOCUMENT_ID.pdf</span>
-        <a href="https://www.justice.gov/epstein/search?search=SEARCH_TERMS" target="_blank">Search DOJ Library →</a>
-    </div>
-    <div class="email-content">
-        <div class="email-meta">
-            <div><strong>From:</strong> Sender Name</div>
-            <div><strong>To:</strong> Recipient Name</div>
-            <div><strong>Date:</strong> Month Day, Year</div>
-        </div>
-        <div class="email-body">
-            <span class="highlight">The most damning quote from the document goes here.</span>
-        </div>
-    </div>
-    <div class="doc-footer">Source: DOJ Epstein Files, Data Set X</div>
-</div>
-
-USE THIS EXACT HTML FOR RESPONSE BOXES:
-
-<aside class="response-box">
-    <div class="label">Person/Organization Response</div>
-    <p>"Their official response or 'No comment was provided.'"</p>
-</aside>
-
-USE THIS EXACT HTML FOR SOURCE BOXES AT THE END:
-
-<div class="source-box">
-    <div class="label">📋 DOJ Documents</div>
-    <ul>
-        <li><a href="https://www.justice.gov/epstein/files/DataSet%20X/DOCUMENT_ID.pdf" target="_blank" rel="noopener">DOCUMENT_ID.pdf — Brief description of what this document shows</a></li>
-    </ul>
-    <a href="https://www.justice.gov/epstein/doj-disclosures/data-set-X-files" class="doj-link" target="_blank" rel="noopener">View DOJ Data Set X →</a>
-</div>
-
-OUTPUT FORMAT:
-Return a JSON object with these exact fields:
+OUTPUT FORMAT - Return a JSON object:
 {{
-    "slug": "firstname-lastname-topic",
-    "headline": "The Article Headline - Make it Dramatic and SEO-Friendly",
-    "meta_description": "Short SEO description under 160 chars",
-    "lede": "A punchy one-liner that hooks the reader",
-    "tag": "LastName",
-    "date_iso": "{today.strftime('%Y-%m-%d')}",
-    "date_readable": "{today.strftime('%B %d, %Y')}",
-    "article_html": "The full article body HTML - see structure requirements below",
-    "doj_documents": [
-        {{"id": "EFTA00XXXXXX.pdf", "url": "https://www.justice.gov/epstein/files/DataSet%20X/EFTA00XXXXXX.pdf", "description": "What this doc shows"}}
+    "theme_headline": "Short punchy headline describing today's main story (e.g., 'Silicon Valley's Epstein Problem Gets Worse')",
+    "names": ["Full Name 1", "Full Name 2", "Full Name 3"],
+    "bullets_short": [
+        {{"name": "Peter Thiel", "text": "appears in thousands of documents spanning 2014-2017.", "source": "CNBC", "url": "https://..."}},
+        {{"name": "20+ tech executives", "text": "maintained regular contact — far more than previously known.", "source": "NBC News", "url": "https://..."}}
     ],
-    "reading_time": 4
+    "bullets_long": [
+        {{"name": "Peter Thiel", "text": "appears in thousands of documents spanning years of lunch meetings from 2014-2017. Emails show Epstein's team coordinating visits to Thiel's San Francisco office and arranging private dinners at high-end restaurants.", "source": "CNBC", "url": "https://..."}},
+        {{"name": "20+ tech executives", "text": "maintained regular contact with Epstein — far more than previously known. The documents reveal a systematic effort to cultivate Silicon Valley's most powerful figures, with detailed scheduling and follow-up correspondence.", "source": "NBC News", "url": "https://..."}}
+    ]
 }}
 
-ARTICLE STRUCTURE REQUIREMENTS:
-1. Start with 2-3 paragraphs of context
-2. Use <h3> for section headers (styled red, uppercase)
-3. Include AT LEAST 2 document evidence boxes with the EXACT HTML structure shown above
-4. Include at least one response box
-5. End with a source box listing all DOJ documents
-6. Use <strong> tags for names when first mentioned
-7. Use <em> for quotes within paragraphs
-8. Make document IDs realistic (format: EFTA00XXXXXX.pdf)
-9. Reference real DOJ data sets (Data Set 1-12)
-10. Write in punchy, tabloid style - short paragraphs, dramatic reveals
+IMPORTANT RULES:
+1. bullets_short: ONE LINE each (for homepage card - fits next to thumbnail)
+2. bullets_long: 2-4 SENTENCES each (for article page - full context)
+3. 4-6 bullets total
+4. Lead each bullet with a bolded name or subject
+5. Use REAL news sources with REAL URLs
+6. Names array should only contain full person names (for tags)
+7. If you can't find 4+ distinct new stories, return {{"no_news": true}}
 """
 
-    print("Calling Claude API to generate article...")
+    print("Calling Claude API to generate roundup...")
 
     response = client.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=8000,
+        max_tokens=4000,
         messages=[
             {"role": "user", "content": prompt}
         ]
     )
 
-    # Extract the response text
     response_text = response.content[0].text
 
-    # Try to parse JSON from the response
-    # Handle case where response might have markdown code blocks
+    # Parse JSON
     json_match = re.search(r'```json\s*(.*?)\s*```', response_text, re.DOTALL)
     if json_match:
         json_str = json_match.group(1)
     else:
-        # Try to find raw JSON
         json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
         if json_match:
             json_str = json_match.group(0)
         else:
             print("ERROR: Could not find JSON in response")
-            print(response_text)
             return None
 
     try:
-        article_data = json.loads(json_str)
+        data = json.loads(json_str)
     except json.JSONDecodeError as e:
         print(f"ERROR: Could not parse JSON: {e}")
-        print(json_str[:500])
         return None
 
-    return article_data
+    if data.get('no_news'):
+        print("No significant news found today")
+        return None
 
-def create_article_html(data):
-    """Create the full article HTML from the template and data."""
+    return data
+
+def create_article_html(data, today):
+    """Create the full article page HTML."""
+
+    date_iso = today.strftime('%Y-%m-%d')
+    date_readable = today.strftime('%B %d, %Y')
+    month_day = today.strftime('%B %d').replace(' 0', ' ')
+    day_name = today.strftime('%A')
+    filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
+
+    # Build bullets HTML for article page (long version)
+    bullets_html = ""
+    for bullet in data['bullets_long']:
+        bullets_html += f'''
+                <li><strong>{bullet['name']}</strong> {bullet['text']} <a href="{bullet['url']}" target="_blank" class="source-link">{bullet['source']} →</a></li>
+'''
+
+    # Build tags HTML
+    tags_html = ""
+    for name in data['names'][:4]:
+        name_param = urllib.parse.quote_plus(name.lower())
+        tags_html += f'                    <a href="index.html?search={name_param}" class="article-tag">{name}</a>\n'
 
     # URL encode for share buttons
-    import urllib.parse
-    url = f"https://epstein-exposed.com/{data['slug']}"
+    url = f"https://epsteinfilesdaily.com/{filename}"
     url_encoded = urllib.parse.quote(url, safe='')
-    headline_encoded = urllib.parse.quote(data['headline'], safe='')
+    headline = f"{month_day}: {data['theme_headline']}"
+    headline_encoded = urllib.parse.quote(headline, safe='')
 
-    html = f'''<!DOCTYPE html>
-<html lang="en" prefix="og: https://ogp.me/ns#">
-<head>
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8030148209172516" crossorigin="anonymous"></script>
+    # Read template from existing article
+    template = read_file('daily-feb-9-2026.html')
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{data['headline']} — Epstein Exposed</title>
-    <meta name="description" content="{data['meta_description']}">
-    <meta name="author" content="Epstein Exposed">
-    <link rel="canonical" href="{url}">
+    # Replace content - this is a simplified approach
+    # In production, you'd want a proper templating system
+    html = template
 
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="{url}">
-    <meta property="og:title" content="{data['headline']}">
-    <meta property="og:description" content="{data['meta_description']}">
-    <meta property="og:image" content="https://epstein-exposed.com/og-{data['slug']}.jpg">
-    <meta property="og:site_name" content="Epstein Exposed">
+    # Update title
+    html = re.sub(r'<title>.*?</title>', f'<title>{month_day}: {data["theme_headline"]} — Epstein Files Daily</title>', html)
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    # Update meta description
+    first_bullet = data['bullets_short'][0]
+    meta_desc = f"{first_bullet['name']} {first_bullet['text'][:100]}..."
+    html = re.sub(r'<meta name="description" content=".*?">', f'<meta name="description" content="{meta_desc}">', html)
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%231a1a1a' rx='15' width='100' height='100'/><circle cx='42' cy='42' r='32' fill='%232a2a2a' stroke='white' stroke-width='3'/><text x='42' y='48' font-size='28' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>EE</text><rect x='18' y='52' width='48' height='6' fill='%23dc2626'/><line x1='66' y1='66' x2='88' y2='88' stroke='white' stroke-width='6' stroke-linecap='round'/></svg>">
+    # Update article content
+    html = re.sub(r'<time datetime=".*?">', f'<time datetime="{date_iso}">', html)
+    html = re.sub(r'>February \d+, 2026</time>', f'>{date_readable}</time>', html)
 
-    <style>
-        *{{margin:0;padding:0;box-sizing:border-box}}
-        body{{font-family:'Newsreader',Georgia,serif;background:#fafafa;color:#1a1a1a;line-height:1.7}}
-        a{{color:inherit}}
-        header{{background:#fff;border-bottom:1px solid #e5e5e5;padding:24px 0}}
-        .header-inner{{max-width:720px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}}
-        .logo{{display:flex;align-items:center;gap:14px;text-decoration:none}}
-        .logo-icon{{width:56px;height:56px;background:#1a1a1a;border-radius:8px;display:flex;align-items:center;justify-content:center}}
-        .logo-icon svg{{width:50px;height:50px}}
-        .logo-text{{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:#1a1a1a;display:flex;flex-direction:column;line-height:1.1}}
-        .logo-text .redact-bar{{height:5px;background:#dc2626;margin-top:3px;width:100%}}
-        .logo-text .exposed{{font-family:'Courier New',monospace;font-size:10px;font-weight:700;color:#dc2626;letter-spacing:0.5px}}
-        nav a{{font-family:'Inter',sans-serif;color:#666;text-decoration:none;font-size:14px;font-weight:500;margin-left:24px}}
-        nav a:hover{{color:#dc2626}}
-        main{{max-width:720px;margin:0 auto;padding:48px 24px}}
-        .back-link{{font-family:'Inter',sans-serif;font-size:14px;color:#666;text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:24px}}
-        .back-link:hover{{color:#dc2626}}
-        article.article{{margin-bottom:56px}}
-        .article-meta{{font-family:'Inter',sans-serif;font-size:12px;color:#888;margin-bottom:12px;display:flex;align-items:center;gap:12px;text-transform:uppercase;letter-spacing:.5px}}
-        .article-tags{{display:flex;flex-wrap:wrap;gap:6px;margin-right:8px}}
-        .article-tag{{background:#1e293b;color:#fff;padding:4px 12px;border-radius:4px;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.3px;text-decoration:none;transition:background 0.2s}}
-        .article-tag:hover{{background:#dc2626}}
-        article.article h1{{font-family:'Inter',sans-serif;font-size:32px;font-weight:800;line-height:1.2;margin-bottom:16px;letter-spacing:-.5px}}
-        article.article .lede{{font-size:20px;color:#333;margin-bottom:20px;font-style:italic}}
-        article.article p{{font-size:17px;margin-bottom:16px;color:#2a2a2a}}
-        article.article strong{{color:#000}}
-        article.article h3{{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;margin:28px 0 12px;color:#dc2626;text-transform:uppercase;letter-spacing:.5px}}
-        .response-box{{background:#f3f4f6;border-radius:8px;padding:20px;margin:20px 0}}
-        .response-box .label{{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}}
-        .response-box p{{margin-bottom:0;font-style:italic}}
-        .source-box{{background:#1e293b;border-radius:8px;padding:20px;margin:24px 0 0}}
-        .source-box .label{{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}}
-        .source-box ul{{list-style:none;margin:0;padding:0}}
-        .source-box li{{margin-bottom:8px}}
-        .source-box a{{color:#60a5fa;text-decoration:none;font-family:'Inter',sans-serif;font-size:14px}}
-        .source-box a:hover{{text-decoration:underline;color:#93c5fd}}
-        .source-box .doj-link{{display:inline-block;background:#dc2626;color:#fff;padding:8px 16px;border-radius:6px;font-weight:600;margin-top:12px}}
-        .source-box .doj-link:hover{{background:#b91c1c;text-decoration:none}}
-        .share-section{{margin:32px 0;padding:24px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0}}
-        .share-section .share-label{{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}}
-        .share-buttons{{display:flex;flex-wrap:wrap;gap:10px}}
-        .share-btn{{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all 0.2s}}
-        .share-btn svg{{width:18px;height:18px}}
-        .share-btn.twitter{{background:#000;color:#fff}}
-        .share-btn.twitter:hover{{background:#333}}
-        .share-btn.bluesky{{background:#0085ff;color:#fff}}
-        .share-btn.bluesky:hover{{background:#0066cc}}
-        .share-btn.facebook{{background:#1877f2;color:#fff}}
-        .share-btn.facebook:hover{{background:#0d65d9}}
-        .share-btn.email{{background:#64748b;color:#fff}}
-        .share-btn.email:hover{{background:#475569}}
-        .doc-evidence{{margin:24px 0;background:#fff;border:1px solid #d1d5db;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1)}}
-        .doc-evidence .doc-header{{background:#374151;color:#fff;padding:10px 16px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;display:flex;justify-content:space-between;align-items:center}}
-        .doc-evidence .doc-header .doc-id{{color:#9ca3af}}
-        .doc-evidence .doc-header a{{color:#60a5fa;text-decoration:none;font-size:12px}}
-        .doc-evidence .doc-header a:hover{{text-decoration:underline}}
-        .doc-evidence .email-content{{padding:20px;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;background:#fefefe}}
-        .doc-evidence .email-meta{{margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e5e7eb}}
-        .doc-evidence .email-meta div{{margin-bottom:4px}}
-        .doc-evidence .email-meta strong{{display:inline-block;width:60px;color:#6b7280}}
-        .doc-evidence .email-body{{color:#1f2937}}
-        .doc-evidence .email-body .highlight{{background:#fef08a;padding:2px 4px}}
-        .doc-evidence .doc-footer{{background:#f3f4f6;padding:10px 16px;font-family:'Inter',sans-serif;font-size:11px;color:#6b7280;border-top:1px solid #e5e7eb}}
-        footer{{max-width:720px;margin:0 auto;padding:32px 24px;text-align:center;border-top:1px solid #e5e5e5}}
-        footer p{{font-family:'Inter',sans-serif;color:#888;font-size:13px}}
-        footer a{{color:#666;text-decoration:none}}
-        footer a:hover{{color:#dc2626}}
-        @media(max-width:600px){{
-            article.article h1{{font-size:24px}}
-            article.article .lede{{font-size:17px}}
-            nav a{{margin-left:12px;font-size:12px}}
-            .header-inner{{padding:0 16px}}
-            main{{padding:32px 16px}}
-            .doc-evidence .email-content{{padding:14px;font-size:12px}}
-            .article-tag{{padding:3px 8px;font-size:10px}}
-            .share-buttons{{gap:8px}}
-            .share-btn{{padding:8px 12px;font-size:12px}}
-            .share-btn span{{display:none}}
-            .share-btn svg{{width:20px;height:20px}}
-        }}
-    </style>
-</head>
-<body>
-    <header>
-        <div class="header-inner">
-            <a href="index.html" class="logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="42" cy="42" r="32" fill="#2a2a2a" stroke="white" stroke-width="3"/>
-                        <text x="42" y="48" font-size="28" font-family="Arial,sans-serif" font-weight="bold" fill="white" text-anchor="middle">EE</text>
-                        <rect x="18" y="52" width="48" height="6" fill="#dc2626"/>
-                        <line x1="66" y1="66" x2="88" y2="88" stroke="white" stroke-width="6" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <span class="logo-text">EPSTEIN<span class="redact-bar"></span><span class="exposed">EXPOSED</span></span>
-            </a>
-            <nav>
-                <a href="index.html">Home</a>
-                <a href="archive.html">Archive</a>
-                <a href="about.html">About</a>
-            </nav>
-        </div>
-    </header>
+    # Update h1
+    html = re.sub(r'<h1>.*?</h1>', f'<h1>{month_day}: {data["theme_headline"]}</h1>', html)
 
-    <main>
-        <a href="index.html" class="back-link">← Back to all articles</a>
+    # Update tags
+    tags_section = '<div class="article-tags">\n' + tags_html + '                </div>'
+    html = re.sub(r'<div class="article-tags">.*?</div>', tags_section, html, flags=re.DOTALL)
 
-        <article class="article">
-            <div class="article-meta">
-                <div class="article-tags">
-                    <a href="index.html?search={data['tag'].lower()}" class="article-tag">{data['tag']}</a>
-                </div>
-                <time datetime="{data['date_iso']}">{data['date_readable']}</time>
-            </div>
-            <h1>{data['headline']}</h1>
-            <p class="lede">{data['lede']}</p>
+    # Update bullets
+    bullets_section = f'<ul class="lede-bullets">{bullets_html}            </ul>'
+    html = re.sub(r'<ul class="lede-bullets">.*?</ul>', bullets_section, html, flags=re.DOTALL)
 
-            <div>
-                {data['article_html']}
-
-                <div class="share-section">
-                    <div class="share-label">Share this article</div>
-                    <div class="share-buttons">
-                        <a href="https://twitter.com/intent/tweet?url={url_encoded}&text={headline_encoded}" target="_blank" rel="noopener" class="share-btn twitter">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                            <span>X / Twitter</span>
-                        </a>
-                        <a href="https://bsky.app/intent/compose?text={headline_encoded}%20{url_encoded}" target="_blank" rel="noopener" class="share-btn bluesky">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"/></svg>
-                            <span>Bluesky</span>
-                        </a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={url_encoded}" target="_blank" rel="noopener" class="share-btn facebook">
-                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                            <span>Facebook</span>
-                        </a>
-                        <a href="mailto:?subject={headline_encoded}&body=Check%20out%20this%20article%3A%20{url_encoded}" class="share-btn email">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-                            <span>Email</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </article>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Epstein Exposed · <a href="index.html">Home</a> · <a href="archive.html">Archive</a> · <a href="about.html">About</a> · <a href="privacy.html">Privacy</a></p>
-    </footer>
-
-</body>
-</html>'''
+    # Update share links
+    html = re.sub(r'daily-feb-9-2026', filename, html)
+    html = re.sub(r'Feb%209%3A%20Silicon%20Valley%27s%20Epstein%20Problem%20Gets%20Worse', headline_encoded, html)
 
     return html
 
-def update_index_html(data):
-    """Add the new article to index.html."""
+def update_index_html(data, today):
+    """Add the new roundup card to index.html."""
+
+    date_iso = today.strftime('%Y-%m-%d')
+    date_readable = today.strftime('%B %d, %Y')
+    month_day = today.strftime('%B %d').replace(' 0', ' ')
+    filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
+
+    # Build short bullets HTML
+    bullets_html = ""
+    for bullet in data['bullets_short'][:4]:
+        bullets_html += f'                                <li><strong>{bullet["name"]}</strong> {bullet["text"]} <a href="{bullet["url"]}" target="_blank" class="source-link">{bullet["source"]} →</a></li>\n'
+
+    # Build tags
+    tags_data = ','.join([name.lower() for name in data['names'][:4]])
+    tags_html = ""
+    for name in data['names'][:4]:
+        name_param = urllib.parse.quote_plus(name.lower())
+        tags_html += f'                                    <a href="index.html?search={name_param}" class="article-tag">{name}</a>\n'
+
+    # Get current thumbnail version
+    existing_roundups = get_existing_roundups()
+    thumb_version = len(existing_roundups) + 1
+
+    new_card = f'''
+                <!-- DAILY ROUNDUP: {date_readable} -->
+                <article class="article-preview featured" data-tags="{tags_data}">
+                    <div class="article-top">
+                        <a href="{filename}.html" class="article-thumb">
+                            <img src="images/{filename}.png?v={thumb_version}" alt="{date_readable} Epstein news roundup" loading="lazy">
+                        </a>
+                        <div class="article-title-section">
+                            <div class="article-meta">
+                                <div class="article-tags">
+{tags_html}                                </div>
+                                <time datetime="{date_iso}" class="article-date">{date_readable}</time>
+                            </div>
+                            <h2><a href="{filename}.html">{month_day}: Read Daily Summary →</a></h2>
+                            <ul class="lede-bullets">
+{bullets_html}                            </ul>
+                        </div>
+                    </div>
+                </article>
+'''
 
     index_content = read_file('index.html')
 
-    # Create article card matching the site's actual structure
-    new_article_card = f'''
-            <!-- AUTO-GENERATED ARTICLE: {data['tag'].upper()} -->
-            <article class="article-preview featured" data-tags="{data['tag'].lower()}">
-                <div class="article-top">
-                    <div class="article-title-section">
-                        <div class="article-meta">
-                            <div class="article-tags">
-                                <a href="?search={data['tag'].lower()}" class="article-tag">{data['tag']}</a>
-                            </div>
-                            <time datetime="{data['date_iso']}" class="article-date">{data['date_readable']}</time>
-                            <span class="reading-time">· {data.get('reading_time', 4)} min read</span>
-                        </div>
-                        <h2><a href="{data['slug']}.html">{data['headline']}</a></h2>
-                    </div>
-                </div>
-                <p class="lede">{data['meta_description']}</p>
-                <a href="{data['slug']}.html" class="read-more">Read full article</a>
-            </article>
-'''
-
-    # Insert after the articles-container opening
+    # Insert after articles-container opening
     marker = '<div id="articles-container">'
     if marker in index_content:
-        index_content = index_content.replace(marker, marker + new_article_card)
+        index_content = index_content.replace(marker, marker + new_card)
         write_file('index.html', index_content)
-        print(f"Updated index.html with new article")
+        print("Updated index.html with new roundup card")
     else:
         print("WARNING: Could not find articles-container in index.html")
 
-def update_feed_xml(data):
-    """Add the new article to the RSS feed."""
+def update_feed_xml(data, today):
+    """Add the new roundup to RSS feed."""
 
     try:
         feed_content = read_file('feed.xml')
@@ -408,119 +362,86 @@ def update_feed_xml(data):
         print("WARNING: feed.xml not found, skipping RSS update")
         return
 
-    url = f"https://epstein-exposed.com/{data['slug']}.html"
-    pub_date = datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000')
+    month_day = today.strftime('%B %d').replace(' 0', ' ')
+    filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
+    url = f"https://epsteinfilesdaily.com/{filename}.html"
+    pub_date = today.strftime('%a, %d %b %Y %H:%M:%S +0000')
+    headline = f"{month_day}: {data['theme_headline']}"
+
+    first_bullet = data['bullets_short'][0]
+    description = f"{first_bullet['name']} {first_bullet['text']}"
 
     new_item = f'''
     <item>
-      <title>{data['headline']}</title>
+      <title>{headline}</title>
       <link>{url}</link>
       <guid>{url}</guid>
       <pubDate>{pub_date}</pubDate>
-      <description>{data['meta_description']}</description>
+      <description>{description}</description>
     </item>'''
 
-    # Insert after <channel> opening
     marker = '</language>'
     if marker in feed_content:
         feed_content = feed_content.replace(marker, marker + new_item)
         write_file('feed.xml', feed_content)
-        print(f"Updated feed.xml with new article")
+        print("Updated feed.xml")
     else:
         print("WARNING: Could not find insertion point in feed.xml")
 
-def update_covered_topics(data):
-    """Add the new article to the covered topics list."""
+def main():
+    print("=" * 50)
+    print("EPSTEIN FILES DAILY - Daily Roundup Generator")
+    print("=" * 50)
 
-    try:
-        topics = read_file('.skills/epstein-article-generator/references/covered-topics.md')
-    except FileNotFoundError:
+    today = datetime.now()
+    day_name = today.strftime('%A')
+    date_str = f"{day_name}, {today.strftime('%B')} {today.day}, {today.year}"
+    filename_base = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
+
+    print(f"\nGenerating roundup for: {date_str}")
+
+    # Check if already generated today
+    if f"{filename_base}.html" in get_existing_roundups():
+        print(f"Roundup for today already exists: {filename_base}.html")
         return
 
-    # Find the "Published Articles" section and add the new one
-    new_entry = f'''
-### {len(get_existing_articles()) + 1}. {data['tag']} - {data['headline'][:50]}...
-- **File:** `{data['slug']}.html`
-- **Headline:** {data['headline']}
-- **Published:** {data['date_readable']}
-- **Key Details:** Auto-generated article
-- **Documents:** See article for sources
+    # Generate roundup content
+    roundup_data = generate_roundup()
 
-'''
+    if not roundup_data:
+        print("No roundup generated (not enough news)")
+        return
 
-    # Insert after "## Published Articles"
-    marker = "## Published Articles\n"
-    if marker in topics:
-        topics = topics.replace(marker, marker + new_entry)
-        write_file('.skills/epstein-article-generator/references/covered-topics.md', topics)
-        print("Updated covered-topics.md")
+    print(f"\nTheme: {roundup_data['theme_headline']}")
+    print(f"Names: {', '.join(roundup_data['names'])}")
+    print(f"Bullets: {len(roundup_data['bullets_short'])}")
 
-def main():
-    import time
+    # Generate thumbnail
+    thumb_filename = f"images/{filename_base}.png"
+    generate_thumbnail(date_str, roundup_data['theme_headline'], thumb_filename)
 
-    NUM_ARTICLES = 5  # Generate 5 articles per day
+    # Create article HTML
+    article_html = create_article_html(roundup_data, today)
+    write_file(f"{filename_base}.html", article_html)
+    print(f"Created: {filename_base}.html")
 
+    # Update index.html
+    update_index_html(roundup_data, today)
+
+    # Update RSS feed
+    update_feed_xml(roundup_data, today)
+
+    # Save info for workflow
+    latest_info = {
+        "headline": f"{today.strftime('%B')} {today.day}: {roundup_data['theme_headline']}",
+        "slug": filename_base,
+        "date": today.strftime('%Y-%m-%d')
+    }
+    write_file('latest_article.json', json.dumps(latest_info))
+
+    print("\n" + "=" * 50)
+    print("✅ ROUNDUP GENERATED SUCCESSFULLY")
     print("=" * 50)
-    print("EPSTEIN EXPOSED - Daily Article Generator")
-    print(f"Generating {NUM_ARTICLES} articles...")
-    print("=" * 50)
-
-    successful = 0
-    failed = 0
-
-    for i in range(NUM_ARTICLES):
-        print(f"\n{'='*50}")
-        print(f"ARTICLE {i+1} of {NUM_ARTICLES}")
-        print(f"{'='*50}")
-
-        # Generate article content
-        article_data = generate_article()
-
-        if not article_data:
-            print(f"FAILED: Could not generate article {i+1}")
-            failed += 1
-            continue
-
-        print(f"\nGenerated article: {article_data['headline']}")
-        print(f"Slug: {article_data['slug']}")
-
-        # Create the HTML file
-        html = create_article_html(article_data)
-        filename = f"{article_data['slug']}.html"
-        write_file(filename, html)
-        print(f"Created: {filename}")
-
-        # Update index.html
-        update_index_html(article_data)
-
-        # Update RSS feed
-        update_feed_xml(article_data)
-
-        # Update covered topics
-        update_covered_topics(article_data)
-
-        successful += 1
-        print(f"\n✅ Article {i+1} complete!")
-
-        # Small delay between articles to avoid rate limiting
-        if i < NUM_ARTICLES - 1:
-            print("Waiting 5 seconds before next article...")
-            time.sleep(5)
-
-    # Save info about last article for reference
-    if article_data:
-        latest_info = {
-            "headline": article_data['headline'],
-            "slug": article_data['slug'],
-            "date": article_data['date_iso']
-        }
-        write_file('latest_article.json', json.dumps(latest_info))
-
-    print(f"\n{'='*50}")
-    print(f"GENERATION COMPLETE")
-    print(f"✅ Successful: {successful}")
-    print(f"❌ Failed: {failed}")
-    print(f"{'='*50}")
 
 if __name__ == "__main__":
     main()
