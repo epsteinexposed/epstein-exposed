@@ -51,22 +51,21 @@ Extract all **person names** mentioned in the coverage. These become your tags.
 
 ### Step 3: Write the Lede
 
-Write 3-4 sentences summarizing the day's biggest revelations:
+Write 3-4 bullet points highlighting the most important revelations:
 
 ```html
-<p class="lede">
-    Today's DOJ document release reveals new Silicon Valley connections.
-    Peter Thiel appears in thousands of pages with lunch meetings spanning 2014-2017.
-    Meanwhile, documents show Google co-founder Sergey Brin received outreach from
-    Ghislaine Maxwell after meeting at TED in 2003.
-</p>
+<ul class="lede-bullets">
+    <li><strong>Peter Thiel</strong> appears in thousands of pages with lunch meetings spanning 2014-2017</li>
+    <li><strong>Sergey Brin</strong> received outreach from Ghislaine Maxwell after meeting at TED in 2003</li>
+    <li><strong>Elon Musk</strong> was invited to a Michelin-starred dinner with Epstein and Zuckerberg</li>
+</ul>
 ```
 
 **Lede guidelines:**
-- Focus on the most newsworthy revelations
-- Name specific people and connections
-- Be factual and source-based
-- Create urgency without sensationalism
+- 3-4 bullets maximum — scannable, not overwhelming
+- Lead each bullet with a bolded name
+- One key fact per bullet — be specific
+- No fluff — just the most damning details
 
 ### Step 4: Create Link Cards
 
@@ -173,7 +172,11 @@ Add the new roundup card to index.html:
                 <time datetime="YYYY-MM-DD" class="article-date">[Month DD, YYYY]</time>
             </div>
             <h2><a href="daily-[month]-[day]-[year].html">[Month Day]: [Theme Headline]</a></h2>
-            <p class="lede">[Same 3-4 sentence lede from article]</p>
+            <ul class="lede-bullets">
+                <li><strong>[Name]</strong> [key fact]</li>
+                <li><strong>[Name]</strong> [key fact]</li>
+                <li><strong>[Name]</strong> [key fact]</li>
+            </ul>
             <a href="daily-[month]-[day]-[year].html" class="read-more">Read full roundup</a>
         </div>
     </div>

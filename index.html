@@ -221,6 +221,10 @@
         .article-preview h2 a:hover{color:var(--accent)}
 
         .article-preview .lede{font-size:15px;color:var(--text-muted);margin-bottom:12px;line-height:1.5}
+        .article-preview .lede-bullets{margin:0 0 12px 0;padding-left:16px;list-style:none;font-size:14px;color:var(--text-muted);line-height:1.5}
+        .article-preview .lede-bullets li{margin-bottom:4px;position:relative;padding-left:12px}
+        .article-preview .lede-bullets li::before{content:"•";color:var(--accent);font-weight:bold;position:absolute;left:0}
+        .article-preview .lede-bullets li strong{color:var(--text)}
 
         .read-more{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;display:inline-flex;align-items:center;gap:6px}
         .read-more:hover{color:#fff}
@@ -380,7 +384,11 @@
                                 <time datetime="2026-02-09" class="article-date">February 9, 2026</time>
                             </div>
                             <h2><a href="daily-feb-9-2026.html">February 9: Silicon Valley's Epstein Problem Gets Worse</a></h2>
-                            <p class="lede">Today's DOJ document release reveals extensive Silicon Valley connections. Peter Thiel appears in thousands of pages with lunch meetings spanning 2014-2017. Documents show Google co-founder Sergey Brin received outreach from Ghislaine Maxwell after meeting at TED in 2003. Meanwhile, a planned dinner at Michelin-starred Baumé would have gathered Musk, Zuckerberg, and Thiel at one table with Epstein.</p>
+                            <ul class="lede-bullets">
+                                <li><strong>Peter Thiel</strong> appears in thousands of documents with lunch meetings spanning 2014-2017</li>
+                                <li><strong>20+ tech executives</strong> were in regular contact — far more than previously known</li>
+                                <li><strong>Elon Musk</strong> invited to Michelin-star dinner at Baumé with Zuckerberg and Thiel</li>
+                            </ul>
                             <a href="daily-feb-9-2026.html" class="read-more">Read full roundup</a>
                         </div>
                     </div>
