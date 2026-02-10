@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newspaper Thumbnail Mockups V2 - Epstein Files Daily</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Oswald:wght@500;600;700&family=Playfair+Display:wght@400;700;900&family=Old+Standard+TT:wght@400;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 40px;
+            margin: 0;
+        }
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 32px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .mockup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 40px;
+        }
+        .mockup-item {
+            background: #252525;
+            padding: 24px;
+            border-radius: 4px;
+        }
+        .mockup-item h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 18px;
+            margin: 0 0 16px 0;
+            color: #dc2626;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .thumbnail {
+            width: 420px;
+            height: 236px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* OPTION 1: Vintage Broadsheet */
+        .thumb-1 {
+            background: #f4f1e8;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            padding: 16px 20px;
+            border: 1px solid #d0c9b8;
+        }
+        .thumb-1 .masthead {
+            font-family: 'UnifrakturMaguntia', serif;
+            font-size: 38px;
+            color: #1a1a1a;
+            text-align: center;
+            border-bottom: 3px double #1a1a1a;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+        .thumb-1 .dateline {
+            font-family: 'Old Standard TT', serif;
+            font-size: 11px;
+            color: #555;
+            text-align: center;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+        .thumb-1 .headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            font-weight: 900;
+            color: #1a1a1a;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .thumb-1 .subhead {
+            font-family: 'Old Standard TT', serif;
+            font-size: 13px;
+            font-style: italic;
+            color: #444;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* OPTION 2: Tabloid EXTRA */
+        .thumb-2 {
+            background: #fff;
+            position: relative;
+        }
+        .thumb-2 .extra-banner {
+            background: #dc2626;
+            color: #fff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            padding: 8px;
+            letter-spacing: 8px;
+        }
+        .thumb-2 .main-content {
+            padding: 12px 20px;
+            text-align: center;
+        }
+        .thumb-2 .paper-name {
+            font-family: 'Old Standard TT', serif;
+            font-size: 12px;
+            color: #666;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .thumb-2 .big-headline {
+            font-family: 'Oswald', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        .thumb-2 .sub-headline {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        .thumb-2 .date-stripe {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            padding: 6px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        /* OPTION 3: Classified Document Style */
+        .thumb-3 {
+            background: #f8f6f0;
+            padding: 20px;
+            position: relative;
+            border: 1px solid #ccc;
+        }
+        .thumb-3::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 24px,
+                rgba(0,0,0,0.03) 24px,
+                rgba(0,0,0,0.03) 25px
+            );
+        }
+        .thumb-3 .header-row {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .thumb-3 .doc-title {
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .thumb-3 .doc-date {
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .thumb-3 .classified-stamp {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-12deg);
+            font-family: 'Oswald', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: rgba(220, 38, 38, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            white-space: nowrap;
+        }
+        .thumb-3 .released-stamp {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            border: 3px solid #dc2626;
+            color: #dc2626;
+            font-family: 'Oswald', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 6px 14px;
+            transform: rotate(-5deg);
+        }
+
+        /* OPTION 4: Front Page with Photo Box */
+        .thumb-4 {
+            background: #f5f5dc;
+            display: grid;
+            grid-template-columns: 1fr 140px;
+            border: 1px solid #ccc;
+        }
+        .thumb-4 .left-col {
+            padding: 16px;
+            border-right: 1px solid #ccc;
+        }
+        .thumb-4 .masthead {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 900;
+            color: #1a1a1a;
+            border-bottom: 2px solid #1a1a1a;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        .thumb-4 .headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.15;
+            margin-bottom: 8px;
+        }
+        .thumb-4 .byline {
+            font-family: 'Old Standard TT', serif;
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+        }
+        .thumb-4 .right-col {
+            background: #e8e8d8;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+        }
+        .thumb-4 .photo-box {
+            flex: 1;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+        .thumb-4 .date-box {
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            color: #1a1a1a;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .thumb-4 .date-box .day {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        /* OPTION 5: Modern Newsprint */
+        .thumb-5 {
+            background: linear-gradient(180deg, #f9f9f4 0%, #f0efe6 100%);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .thumb-5 .top-bar {
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            padding: 6px 16px;
+            display: flex;
+            justify-content: space-between;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .thumb-5 .masthead {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: #1a1a1a;
+            text-align: center;
+            padding: 12px 16px 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        .thumb-5 .headline-area {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .thumb-5 .headline {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-align: center;
+            line-height: 1.15;
+        }
+        .thumb-5 .bottom-bar {
+            border-top: 3px solid #dc2626;
+            padding: 8px 16px;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* OPTION 6: Breaking Bulletin */
+        .thumb-6 {
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+        }
+        .thumb-6 .alert-bar {
+            background: #dc2626;
+            color: #fff;
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 6px 16px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .thumb-6 .alert-bar::before {
+            content: '●';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0.3; }
+        }
+        .thumb-6 .paper-header {
+            background: #fff;
+            padding: 8px 16px;
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: #1a1a1a;
+            border-bottom: 2px solid #dc2626;
+        }
+        .thumb-6 .content-area {
+            flex: 1;
+            background: #fff;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .thumb-6 .date-big {
+            font-family: 'Oswald', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .thumb-6 .year {
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            color: #666;
+        }
+        .thumb-6 .ticker {
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 10px;
+            padding: 6px 16px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Newspaper Thumbnail Mockups V2</h1>
+
+    <div class="mockup-grid">
+        <!-- Option 1: Vintage Broadsheet -->
+        <div class="mockup-item">
+            <h2>Option 1: Vintage Broadsheet</h2>
+            <div class="thumbnail thumb-1">
+                <div class="masthead">Epstein Files Daily</div>
+                <div class="dateline">SUNDAY, FEBRUARY 9, 2026</div>
+                <div class="headline">Silicon Valley's Epstein Problem Gets Worse</div>
+                <div class="subhead">New documents reveal extensive tech industry ties</div>
+            </div>
+        </div>
+
+        <!-- Option 2: Tabloid EXTRA -->
+        <div class="mockup-item">
+            <h2>Option 2: Tabloid Extra Edition</h2>
+            <div class="thumbnail thumb-2">
+                <div class="extra-banner">★ EXTRA ★</div>
+                <div class="main-content">
+                    <div class="paper-name">Epstein Files Daily</div>
+                    <div class="big-headline">Tech Titans Exposed</div>
+                    <div class="sub-headline">Silicon Valley's darkest secrets revealed</div>
+                </div>
+                <div class="date-stripe">FEBRUARY 9, 2026</div>
+            </div>
+        </div>
+
+        <!-- Option 3: Classified Document -->
+        <div class="mockup-item">
+            <h2>Option 3: Declassified Document</h2>
+            <div class="thumbnail thumb-3">
+                <div class="classified-stamp">DECLASSIFIED</div>
+                <div class="header-row">
+                    <span>DOJ FILE NO. 2026-0209</span>
+                    <span>PAGE 1 OF 3,247,891</span>
+                </div>
+                <div class="doc-title">DAILY INTELLIGENCE BRIEF</div>
+                <div class="doc-date">February 9, 2026</div>
+                <div class="released-stamp">RELEASED</div>
+            </div>
+        </div>
+
+        <!-- Option 4: Front Page with Photo -->
+        <div class="mockup-item">
+            <h2>Option 4: Classic Front Page</h2>
+            <div class="thumbnail thumb-4">
+                <div class="left-col">
+                    <div class="masthead">Epstein Files Daily</div>
+                    <div class="headline">Silicon Valley's Epstein Problem Gets Worse</div>
+                    <div class="byline">New documents reveal years of hidden connections between tech elite and convicted trafficker</div>
+                </div>
+                <div class="right-col">
+                    <div class="photo-box">📰</div>
+                    <div class="date-box">
+                        <div class="day">9</div>
+                        FEB 2026
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option 5: Modern Newsprint -->
+        <div class="mockup-item">
+            <h2>Option 5: Modern Newsprint</h2>
+            <div class="thumbnail thumb-5">
+                <div class="top-bar">
+                    <span>Sunday Edition</span>
+                    <span>February 9, 2026</span>
+                </div>
+                <div class="masthead">Epstein Files Daily</div>
+                <div class="headline-area">
+                    <div class="headline">Silicon Valley's Epstein Problem Gets Worse</div>
+                </div>
+                <div class="bottom-bar">Breaking coverage of the DOJ document releases</div>
+            </div>
+        </div>
+
+        <!-- Option 6: Breaking Bulletin -->
+        <div class="mockup-item">
+            <h2>Option 6: Breaking News Bulletin</h2>
+            <div class="thumbnail thumb-6">
+                <div class="alert-bar">BREAKING NEWS</div>
+                <div class="paper-header">Epstein Files Daily</div>
+                <div class="content-area">
+                    <div class="date-big">February 9</div>
+                    <div class="year">2026</div>
+                </div>
+                <div class="ticker">LATEST DOJ DOCUMENT RELEASES • SILICON VALLEY CONNECTIONS REVEALED</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
