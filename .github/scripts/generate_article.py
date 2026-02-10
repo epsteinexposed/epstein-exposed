@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """
 Daily Roundup Generator for Epstein Files Daily
-Calls Claude API to research news and generate a daily roundup.
+
+CRITICAL: The Claude API CANNOT search the web.
+This script MUST fetch news from Google News RSS first,
+then pass the articles to Claude for formatting.
+
+DO NOT change this to ask Claude to "search for news" - it will fail.
 """
 
 import os
@@ -9,31 +14,75 @@ import json
 import re
 import random
 import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime
 from anthropic import Anthropic
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-# Initialize Anthropic client
 client = Anthropic()
 
 def read_file(path):
-    """Read a file and return its contents."""
     with open(path, 'r', encoding='utf-8') as f:
         return f.read()
 
 def write_file(path, content):
-    """Write content to a file."""
     os.makedirs(os.path.dirname(path) if os.path.dirname(path) else '.', exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
 def get_existing_roundups():
-    """Get list of existing daily roundup files."""
     roundups = []
     for f in os.listdir('.'):
         if f.startswith('daily-') and f.endswith('.html'):
             roundups.append(f)
     return roundups
+
+def fetch_news_from_rss():
+    """Fetch news from Google News RSS - Claude API cannot search the web."""
+    queries = [
+        "epstein+documents+release",
+        "epstein+files+DOJ",
+        "jeffrey+epstein+investigation",
+        "epstein+connections+revealed"
+    ]
+
+    all_articles = []
+    seen_titles = set()
+
+    for query in queries:
+        url = f"https://news.google.com/rss/search?q={query}&hl=en-US&gl=US&ceid=US:en"
+        try:
+            print(f"Fetching: {url}")
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (compatible; EpsteinFilesDaily/1.0)'})
+            with urllib.request.urlopen(req, timeout=30) as response:
+                xml_data = response.read().decode('utf-8')
+
+            root = ET.fromstring(xml_data)
+            for item in root.findall('.//item'):
+                title = item.find('title')
+                link = item.find('link')
+                source = item.find('source')
+                pub_date = item.find('pubDate')
+
+                if title is not None and link is not None:
+                    title_text = title.text or ""
+                    if title_text.lower() not in seen_titles:
+                        seen_titles.add(title_text.lower())
+                        all_articles.append({
+                            'title': title_text,
+                            'url': link.text or "",
+                            'source': source.text if source is not None else "News",
+                            'date': pub_date.text if pub_date is not None else ""
+                        })
+        except Exception as e:
+            print(f"Error fetching {query}: {e}")
+
+    # Filter for relevance
+    keywords = ['epstein', 'ghislaine', 'maxwell', 'doj', 'documents', 'files', 'release']
+    relevant = [a for a in all_articles if any(kw in a['title'].lower() for kw in keywords)]
+    print(f"Found {len(relevant)} relevant articles from RSS")
+    return relevant[:15]
 
 def generate_thumbnail(date_str, headline, filename):
     """Generate newspaper-style thumbnail with paper texture."""
@@ -41,7 +90,6 @@ def generate_thumbnail(date_str, headline, filename):
     WIDTH = 840
     HEIGHT = 472
 
-    # Create aged paper background
     img = Image.new('RGB', (WIDTH, HEIGHT), '#f4ead5')
     draw = ImageDraw.Draw(img)
     pixels = img.load()
@@ -136,7 +184,7 @@ def generate_thumbnail(date_str, headline, filename):
     # Draw headline centered
     y_start = 190
     line_height = 70
-    for i, line in enumerate(lines[:3]):  # Max 3 lines
+    for i, line in enumerate(lines[:3]):
         bbox = draw.textbbox((0, 0), line, font=font_headline)
         text_width = bbox[2] - bbox[0]
         draw.text(((WIDTH - text_width) / 2, y_start + i * line_height), line, fill=ink, font=font_headline)
@@ -149,62 +197,66 @@ def generate_thumbnail(date_str, headline, filename):
     img.save(filename, 'PNG')
     print(f"Created thumbnail: {filename}")
 
-def generate_roundup():
-    """Call Claude to research and generate a daily roundup."""
+def generate_roundup(articles):
+    """Use Claude to format the fetched articles into a roundup."""
+
+    if not articles:
+        print("No articles to format")
+        return None
 
     existing = get_existing_roundups()
     today = datetime.now()
-    day_name = today.strftime('%A')
 
-    prompt = f"""You are a news aggregator for Epstein Files Daily, a site covering the DOJ Epstein file releases.
+    # Format articles for Claude
+    articles_text = "\n".join([
+        f"- {a['title']} (Source: {a['source']}, URL: {a['url']})"
+        for a in articles
+    ])
 
-TODAY'S DATE: {day_name}, {today.strftime('%B %d, %Y')}
+    prompt = f"""You are formatting a news roundup for Epstein Files Daily.
 
-EXISTING ROUNDUPS (don't repeat these stories): {existing}
+TODAY'S DATE: {today.strftime('%A, %B %d, %Y')}
+
+EXISTING ROUNDUPS (avoid repeating old headlines): {existing}
+
+HERE ARE THE NEWS ARTICLES FETCHED FROM RSS (these are REAL articles with REAL URLs):
+{articles_text}
 
 YOUR TASK:
-1. Search for the latest Epstein-related news from today or the past few days
-2. Find 4-6 distinct news stories from reputable sources
-3. Focus on: DOJ document releases, new revelations about connections, legal developments, investigations
-
-SOURCES TO CHECK:
-- Major news: NBC, CNBC, CNN, PBS, NYT, WSJ, Washington Post
-- Tech news: The Verge, Wired, Ars Technica
-- Local papers: SF Chronicle, Mercury News, Miami Herald
-- Wire services: AP, Reuters
+1. Select 4-6 of the most newsworthy and distinct stories
+2. Format them for the website
+3. Extract names of notable people mentioned
 
 OUTPUT FORMAT - Return a JSON object:
 {{
-    "theme_headline": "Short punchy headline describing today's main story (e.g., 'Silicon Valley's Epstein Problem Gets Worse')",
+    "theme_headline": "Short punchy headline summarizing the day's main story (e.g., 'New Documents Reveal Tech Ties')",
     "names": ["Full Name 1", "Full Name 2", "Full Name 3"],
     "bullets_short": [
-        {{"name": "Peter Thiel", "text": "appears in thousands of documents spanning 2014-2017.", "source": "CNBC", "url": "https://..."}},
-        {{"name": "20+ tech executives", "text": "maintained regular contact — far more than previously known.", "source": "NBC News", "url": "https://..."}}
+        {{"name": "Key Subject", "text": "one-line summary.", "source": "Source Name", "url": "actual URL from article"}},
+        ...
     ],
     "bullets_long": [
-        {{"name": "Peter Thiel", "text": "appears in thousands of documents spanning years of lunch meetings from 2014-2017. Emails show Epstein's team coordinating visits to Thiel's San Francisco office and arranging private dinners at high-end restaurants.", "source": "CNBC", "url": "https://..."}},
-        {{"name": "20+ tech executives", "text": "maintained regular contact with Epstein — far more than previously known. The documents reveal a systematic effort to cultivate Silicon Valley's most powerful figures, with detailed scheduling and follow-up correspondence.", "source": "NBC News", "url": "https://..."}}
+        {{"name": "Key Subject", "text": "2-4 sentence detailed summary with context.", "source": "Source Name", "url": "actual URL from article"}},
+        ...
     ]
 }}
 
-IMPORTANT RULES:
-1. bullets_short: ONE LINE each (for homepage card - fits next to thumbnail)
-2. bullets_long: 2-4 SENTENCES each (for article page - full context)
+RULES:
+1. bullets_short: ONE LINE each (for homepage card)
+2. bullets_long: 2-4 SENTENCES each (for article page)
 3. 4-6 bullets total
 4. Lead each bullet with a bolded name or subject
-5. Use REAL news sources with REAL URLs
+5. Use the ACTUAL URLs from the articles above - do not make up URLs
 6. Names array should only contain full person names (for tags)
-7. If you can't find 4+ distinct new stories, return {{"no_news": true}}
+7. If fewer than 4 distinct newsworthy stories, return {{"no_news": true}}
 """
 
-    print("Calling Claude API to generate roundup...")
+    print("Calling Claude API to format roundup...")
 
     response = client.messages.create(
         model="claude-sonnet-4-20250514",
         max_tokens=4000,
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
+        messages=[{"role": "user", "content": prompt}]
     )
 
     response_text = response.content[0].text
@@ -239,7 +291,6 @@ def create_article_html(data, today):
     date_iso = today.strftime('%Y-%m-%d')
     date_readable = today.strftime('%B %d, %Y')
     month_day = today.strftime('%B %d').replace(' 0', ' ')
-    day_name = today.strftime('%A')
     filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
 
     # Build bullets HTML for article page (long version)
@@ -257,15 +308,11 @@ def create_article_html(data, today):
 
     # URL encode for share buttons
     url = f"https://epsteinfilesdaily.com/{filename}"
-    url_encoded = urllib.parse.quote(url, safe='')
     headline = f"{month_day}: {data['theme_headline']}"
-    headline_encoded = urllib.parse.quote(headline, safe='')
 
     # Read template from existing article
     template = read_file('daily-feb-9-2026.html')
 
-    # Replace content - this is a simplified approach
-    # In production, you'd want a proper templating system
     html = template
 
     # Update title
@@ -293,7 +340,6 @@ def create_article_html(data, today):
 
     # Update share links
     html = re.sub(r'daily-feb-9-2026', filename, html)
-    html = re.sub(r'Feb%209%3A%20Silicon%20Valley%27s%20Epstein%20Problem%20Gets%20Worse', headline_encoded, html)
 
     return html
 
@@ -405,11 +451,20 @@ def main():
         print(f"Roundup for today already exists: {filename_base}.html")
         return
 
-    # Generate roundup content
-    roundup_data = generate_roundup()
+    # Step 1: Fetch news from RSS (Claude API cannot search the web!)
+    print("\nStep 1: Fetching news from Google News RSS...")
+    articles = fetch_news_from_rss()
+
+    if not articles:
+        print("ERROR: Could not fetch any articles from RSS")
+        return
+
+    # Step 2: Use Claude to format the articles
+    print("\nStep 2: Using Claude to format articles...")
+    roundup_data = generate_roundup(articles)
 
     if not roundup_data:
-        print("No roundup generated (not enough news)")
+        print("No roundup generated")
         return
 
     print(f"\nTheme: {roundup_data['theme_headline']}")
@@ -440,7 +495,7 @@ def main():
     write_file('latest_article.json', json.dumps(latest_info))
 
     print("\n" + "=" * 50)
-    print("✅ ROUNDUP GENERATED SUCCESSFULLY")
+    print("ROUNDUP GENERATED SUCCESSFULLY")
     print("=" * 50)
 
 if __name__ == "__main__":
