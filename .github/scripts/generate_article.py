@@ -323,6 +323,57 @@ def create_article_html(data, today):
     meta_desc = f"{first_bullet['name']} {first_bullet['text'][:100]}..."
     html = re.sub(r'<meta name="description" content=".*?">', f'<meta name="description" content="{meta_desc}">', html)
 
+    # Update SEO tags (canonical, OG, Twitter, JSON-LD)
+    full_url = f"https://epsteinfilesdaily.com/{filename}.html"
+    image_url = f"https://epsteinfilesdaily.com/images/{filename}.png"
+    full_headline = f"{month_day}: {data['theme_headline']}"
+
+    # Canonical
+    html = re.sub(r'<link rel="canonical" href=".*?">', f'<link rel="canonical" href="{full_url}">', html)
+
+    # Open Graph
+    html = re.sub(r'<meta property="og:url" content=".*?">', f'<meta property="og:url" content="{full_url}">', html)
+    html = re.sub(r'<meta property="og:title" content=".*?">', f'<meta property="og:title" content="{full_headline} — Epstein Files Daily">', html)
+    html = re.sub(r'<meta property="og:description" content=".*?">', f'<meta property="og:description" content="{meta_desc}">', html)
+    html = re.sub(r'<meta property="og:image" content=".*?">', f'<meta property="og:image" content="{image_url}">', html)
+    html = re.sub(r'<meta property="article:published_time" content=".*?">', f'<meta property="article:published_time" content="{date_iso}">', html)
+
+    # Twitter Card
+    html = re.sub(r'<meta name="twitter:url" content=".*?">', f'<meta name="twitter:url" content="{full_url}">', html)
+    html = re.sub(r'<meta name="twitter:title" content=".*?">', f'<meta name="twitter:title" content="{full_headline}">', html)
+    html = re.sub(r'<meta name="twitter:description" content=".*?">', f'<meta name="twitter:description" content="{meta_desc}">', html)
+    html = re.sub(r'<meta name="twitter:image" content=".*?">', f'<meta name="twitter:image" content="{image_url}">', html)
+
+    # JSON-LD (update the entire script block)
+    json_ld = f'''<script type="application/ld+json">
+    {{
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": "{full_headline}",
+        "image": "{image_url}",
+        "datePublished": "{date_iso}",
+        "dateModified": "{date_iso}",
+        "author": {{
+            "@type": "Organization",
+            "name": "Epstein Files Daily"
+        }},
+        "publisher": {{
+            "@type": "Organization",
+            "name": "Epstein Files Daily",
+            "logo": {{
+                "@type": "ImageObject",
+                "url": "https://epsteinfilesdaily.com/og-image.jpg"
+            }}
+        }},
+        "description": "{meta_desc}",
+        "mainEntityOfPage": {{
+            "@type": "WebPage",
+            "@id": "{full_url}"
+        }}
+    }}
+    </script>'''
+    html = re.sub(r'<script type="application/ld\+json">.*?</script>', json_ld, html, flags=re.DOTALL)
+
     # Update article content
     html = re.sub(r'<time datetime=".*?">', f'<time datetime="{date_iso}">', html)
     html = re.sub(r'>February \d+, 2026</time>', f'>{date_readable}</time>', html)
@@ -451,6 +502,52 @@ def update_feed_xml(data, today):
         else:
             print("WARNING: Could not find insertion point in feed.xml")
 
+def update_sitemap(data, today):
+    """Add the new article to sitemap.xml."""
+
+    try:
+        sitemap_content = read_file('sitemap.xml')
+    except FileNotFoundError:
+        print("WARNING: sitemap.xml not found, skipping sitemap update")
+        return
+
+    date_iso = today.strftime('%Y-%m-%d')
+    month_day = today.strftime('%B %d').replace(' 0', ' ')
+    filename = f"daily-{today.strftime('%b').lower()}-{today.day}-{today.year}"
+    headline = data['theme_headline']
+
+    new_entry = f'''
+  <url>
+    <loc>https://epsteinfilesdaily.com/{filename}.html</loc>
+    <lastmod>{date_iso}</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.9</priority>
+    <news:news>
+      <news:publication>
+        <news:name>Epstein Files Daily</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>{date_iso}</news:publication_date>
+      <news:title>{headline}</news:title>
+    </news:news>
+  </url>
+'''
+
+    # Insert after Archive entry
+    marker = '<!-- Daily Articles -->'
+    if marker in sitemap_content:
+        sitemap_content = sitemap_content.replace(marker, marker + new_entry)
+        # Update homepage lastmod
+        sitemap_content = re.sub(
+            r'(<loc>https://epsteinfilesdaily.com/</loc>\s*<lastmod>)\d{4}-\d{2}-\d{2}(</lastmod>)',
+            f'\\g<1>{date_iso}\\g<2>',
+            sitemap_content
+        )
+        write_file('sitemap.xml', sitemap_content)
+        print("Updated sitemap.xml")
+    else:
+        print("WARNING: Could not find insertion point in sitemap.xml")
+
 def main():
     print("=" * 50)
     print("EPSTEIN FILES DAILY - Daily Roundup Generator")
@@ -502,6 +599,9 @@ def main():
 
     # Update RSS feed
     update_feed_xml(roundup_data, today)
+
+    # Update sitemap
+    update_sitemap(roundup_data, today)
 
     # Save info for workflow
     latest_info = {
