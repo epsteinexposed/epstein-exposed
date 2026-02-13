@@ -55,3 +55,14 @@ jobs:
           # Only commit if there are staged changes
           git diff --staged --quiet || git commit -m "Add daily article $(date +%Y-%m-%d)"
           git push origin main
+
+      - name: Ping search engines
+        if: steps.generate.outputs.article_generated == 'true'
+        run: |
+          # Ping Google to refresh sitemap
+          curl -s "https://www.google.com/ping?sitemap=https://epsteinfilesdaily.com/sitemap.xml"
+          echo "Pinged Google sitemap"
+
+          # Ping Bing via IndexNow (also covers Yandex, Seznam, etc.)
+          curl -s "https://www.bing.com/indexnow?url=https://epsteinfilesdaily.com/${{ steps.generate.outputs.slug }}&key=epsteinfilesdaily"
+          echo "Pinged Bing IndexNow"
