@@ -300,11 +300,11 @@ def create_article_html(data, today):
                 <li><strong>{bullet['name']}</strong> {bullet['text']} <a href="{bullet['url']}" target="_blank" class="source-link">{bullet['source']} →</a></li>
 '''
 
-    # Build tags HTML
+    # Build tags HTML - link to name pages
     tags_html = ""
     for name in data['names'][:4]:
-        name_param = urllib.parse.quote_plus(name.lower())
-        tags_html += f'                    <a href="index.html?search={name_param}" class="article-tag">{name}</a>\n'
+        name_slug = name.lower().replace(' ', '-').replace('.', '').replace("'", '')
+        tags_html += f'                    <a href="/names/{name_slug}.html" class="article-tag">{name}</a>\n'
 
     # URL encode for share buttons
     url = f"https://epsteinfilesdaily.com/{filename}"
@@ -407,12 +407,12 @@ def update_index_html(data, today):
     for bullet in data['bullets_short'][:4]:
         bullets_html += f'                                <li><strong>{bullet["name"]}</strong> {bullet["text"]} <a href="{bullet["url"]}" target="_blank" class="source-link">{bullet["source"]} →</a></li>\n'
 
-    # Build tags
+    # Build tags - link to name pages
     tags_data = ','.join([name.lower() for name in data['names'][:4]])
     tags_html = ""
     for name in data['names'][:4]:
-        name_param = urllib.parse.quote_plus(name.lower())
-        tags_html += f'                                    <a href="index.html?search={name_param}" class="article-tag">{name}</a>\n'
+        name_slug = name.lower().replace(' ', '-').replace('.', '').replace("'", '')
+        tags_html += f'                                    <a href="/names/{name_slug}.html" class="article-tag">{name}</a>\n'
 
     # Get current thumbnail version
     existing_roundups = get_existing_roundups()
@@ -501,6 +501,188 @@ def update_feed_xml(data, today):
             print("Updated feed.xml with full content (fallback)")
         else:
             print("WARNING: Could not find insertion point in feed.xml")
+
+def regenerate_name_pages():
+    """Regenerate all name pages after adding a new article."""
+    from collections import defaultdict
+
+    def slugify(name):
+        return name.lower().replace(' ', '-').replace('.', '').replace("'", '')
+
+    # Extract articles and tags
+    articles = []
+    for filename in os.listdir('.'):
+        if filename.startswith('daily-') and filename.endswith('.html'):
+            content = read_file(filename)
+
+            # Extract title
+            title_match = re.search(r'<h1[^>]*>([^<]+)</h1>', content)
+            title = title_match.group(1) if title_match else filename
+
+            # Extract date
+            date_match = re.search(r'<time datetime="([^"]+)"', content)
+            date_str = date_match.group(1) if date_match else ''
+
+            # Extract tags
+            tags = re.findall(r'class="article-tag">([^<]+)</a>', content)
+
+            # Extract thumbnail
+            thumb_match = re.search(r'property="og:image" content="([^"]+)"', content)
+            thumbnail = thumb_match.group(1) if thumb_match else ''
+            if thumbnail.startswith('https://epsteinfilesdaily.com/'):
+                thumbnail = thumbnail.replace('https://epsteinfilesdaily.com/', '')
+
+            # Extract description
+            desc_match = re.search(r'<p class="lead">([^<]+)</p>', content)
+            description = desc_match.group(1) if desc_match else ''
+
+            if tags:
+                articles.append({
+                    'filename': filename,
+                    'title': title,
+                    'date': date_str,
+                    'tags': tags,
+                    'thumbnail': thumbnail,
+                    'description': description
+                })
+
+    # Sort by date descending
+    articles.sort(key=lambda x: x['date'], reverse=True)
+
+    # Build tag index
+    tag_index = defaultdict(list)
+    for article in articles:
+        for tag in article['tags']:
+            tag_index[tag].append(article)
+
+    # Create names directory
+    os.makedirs('names', exist_ok=True)
+
+    # Generate each name page
+    for name, name_articles in tag_index.items():
+        slug = slugify(name)
+
+        # Build article cards
+        article_cards = []
+        for article in name_articles:
+            tags_html = ''.join([
+                f'<a href="/names/{slugify(t)}.html" class="article-tag">{t}</a>'
+                for t in article['tags']
+            ])
+
+            try:
+                from datetime import datetime as dt
+                date_obj = dt.strptime(article['date'], '%Y-%m-%d')
+                formatted_date = date_obj.strftime('%B %d, %Y')
+            except:
+                formatted_date = article['date']
+
+            card = f'''
+            <article class="article-preview" data-tags="{' '.join(t.lower() for t in article['tags'])}">
+                <a href="/{article['filename']}" class="article-thumb">
+                    <img src="/{article['thumbnail']}" alt="{article['title']}" loading="lazy">
+                </a>
+                <div class="article-content">
+                    <div class="article-tags">{tags_html}</div>
+                    <time datetime="{article['date']}">{formatted_date}</time>
+                    <h2 class="article-title"><a href="/{article['filename']}">{article['title']}</a></h2>
+                    <p class="article-excerpt">{article['description'][:200] if article['description'] else ''}...</p>
+                </div>
+            </article>'''
+            article_cards.append(card)
+
+        # Build sidebar
+        sorted_tags = sorted(tag_index.items(), key=lambda x: (-len(x[1]), x[0]))
+        tag_filters_html = '\n'.join([
+            f'<a href="/names/{slugify(tag)}.html" class="tag-filter{" active" if tag == name else ""}"><span>{tag}</span><span class="count">{len(tag_articles)}</span></a>'
+            for tag, tag_articles in sorted_tags[:50]
+        ])
+
+        html = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{name} - Epstein Files Daily</title>
+    <meta name="description" content="All articles mentioning {name} in the Epstein Files.">
+    <link rel="canonical" href="https://epsteinfilesdaily.com/names/{slug}.html">
+    <meta property="og:title" content="{name} - Epstein Files Daily">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://epsteinfilesdaily.com/names/{slug}.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/epstein-unsealed-logo.svg">
+    <style>
+        :root{{--bg:#1f1f1f;--bg-card:#252525;--text:#fff;--text-muted:#b0b0b0;--text-light:#777;--border:#333;--search-bg:#292929;--sidebar-bg:#181818;--accent:#b91c1c}}
+        *{{margin:0;padding:0;box-sizing:border-box}}
+        body{{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}}
+        a{{color:inherit;text-decoration:none}}
+        header{{background:var(--sidebar-bg);padding:12px 24px;border-bottom:3px solid var(--accent);display:flex;justify-content:space-between;align-items:center}}
+        .logo{{display:flex;align-items:center;gap:12px}}
+        .logo-icon{{width:40px;height:40px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}}
+        .logo-text{{font-family:'Oswald',sans-serif;font-size:28px;font-weight:700;text-transform:uppercase;letter-spacing:2px}}
+        .logo-text .daily{{display:block;font-size:12px;letter-spacing:4px;color:var(--text-muted)}}
+        .page-wrapper{{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 80px)}}
+        .sidebar{{background:var(--sidebar-bg);border-right:1px solid var(--border);padding:0;overflow-y:auto;max-height:calc(100vh - 80px);position:sticky;top:0}}
+        .sidebar-section{{padding:16px 20px;border-bottom:1px solid var(--border)}}
+        .sidebar-section h3{{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);margin-bottom:12px}}
+        .tag-filters{{display:flex;flex-direction:column;gap:2px;max-height:400px;overflow-y:auto}}
+        .tag-filter{{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:13px;font-weight:500;color:var(--text-muted);transition:all 0.15s;border-left:3px solid transparent}}
+        .tag-filter:hover{{background:#252525;color:#fff;border-left-color:var(--accent)}}
+        .tag-filter.active{{background:var(--accent);color:#fff;border-left-color:var(--accent)}}
+        .tag-filter .count{{font-size:11px;color:#666;background:#252525;padding:2px 6px}}
+        .tag-filter.active .count{{background:rgba(0,0,0,0.3);color:#fff}}
+        .back-link{{display:block;padding:16px 20px;color:var(--text-muted);font-size:13px;border-bottom:1px solid var(--border)}}
+        .back-link:hover{{color:var(--accent)}}
+        main{{padding:32px}}
+        .page-header{{margin-bottom:32px}}
+        .page-header h1{{font-family:'Oswald',sans-serif;font-size:42px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}}
+        .page-header p{{color:var(--text-muted)}}
+        .articles-grid{{display:flex;flex-direction:column;gap:24px}}
+        .article-preview{{display:grid;grid-template-columns:200px 1fr;gap:20px;padding-bottom:24px;border-bottom:1px solid var(--border)}}
+        .article-thumb{{aspect-ratio:16/9;overflow:hidden;background:#333}}
+        .article-thumb img{{width:100%;height:100%;object-fit:cover}}
+        .article-content{{display:flex;flex-direction:column;gap:8px}}
+        .article-tags{{display:flex;flex-wrap:wrap;gap:6px}}
+        .article-tag{{background:var(--accent);color:#fff;padding:4px 10px;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px}}
+        .article-tag:hover{{background:#991b1b}}
+        .article-content time{{font-size:12px;color:var(--text-light);text-transform:uppercase}}
+        .article-title{{font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;line-height:1.2;text-transform:uppercase}}
+        .article-title a:hover{{color:var(--accent)}}
+        .article-excerpt{{font-size:14px;color:var(--text-muted);line-height:1.5}}
+        @media(max-width:900px){{.page-wrapper{{grid-template-columns:1fr}}.sidebar{{display:none}}.article-preview{{grid-template-columns:1fr}}}}
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <div class="logo-icon">EF</div>
+            <div class="logo-text">Epstein Files<span class="daily">Daily</span></div>
+        </a>
+    </header>
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <a href="/" class="back-link">← Back to Home</a>
+            <div class="sidebar-section">
+                <h3>Names in the Files</h3>
+                <div class="tag-filters">{tag_filters_html}</div>
+            </div>
+        </aside>
+        <main>
+            <div class="page-header">
+                <h1>{name}</h1>
+                <p>{len(name_articles)} article{'' if len(name_articles) == 1 else 's'} mentioning this name</p>
+            </div>
+            <div class="articles-grid">{''.join(article_cards)}</div>
+        </main>
+    </div>
+</body>
+</html>'''
+
+        write_file(f'names/{slug}.html', html)
+
+    print(f"Regenerated {len(tag_index)} name pages")
 
 def update_sitemap(data, today):
     """Add the new article to sitemap.xml."""
@@ -602,6 +784,9 @@ def main():
 
     # Update sitemap
     update_sitemap(roundup_data, today)
+
+    # Regenerate name pages
+    regenerate_name_pages()
 
     # Save info for workflow
     latest_info = {
